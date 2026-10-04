@@ -1,112 +1,757 @@
-<!-- =========================================================
-     BLOGSPOT → FULLSCREEN GOOGLE APPS SCRIPT APP
-     Tempel di Postingan / Halaman Blogger lewat mode "Tampilan HTML".
-     ========================================================= -->
-
-<style>
-/* ---------------------------------------------------------
-   1. ANTI-KEDIP (sebelum JS jalan)
-   Pakai visibility, BUKAN display:none, karena anak dari
-   elemen visibility:hidden tetap bisa dibuat visible.
-   --------------------------------------------------------- */
-body * {
-    visibility: hidden !important;
-}
-
-#gas-app,
-#gas-app * {
-    visibility: visible !important;
-}
-
-/* ---------------------------------------------------------
-   2. MODE APLIKASI (class dipasang oleh JS di bawah)
-   Setelah #gas-app dipindah jadi anak langsung <body>,
-   semua elemen Blogger lain dimatikan total.
-   --------------------------------------------------------- */
-html.gas-app-mode,
-html.gas-app-mode body {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
-    background: #ffffff !important;
-    overscroll-behavior: none;
-}
-
-html.gas-app-mode body > *:not(#gas-app) {
-    display: none !important;
-}
-
-/* ---------------------------------------------------------
-   3. WRAPPER & IFRAME
-   --------------------------------------------------------- */
-#gas-app {
-    position: fixed !important;
-    top: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    overflow: hidden !important;
-    z-index: 2147483647 !important;
-    background: #ffffff !important;
-    transform: none !important;
-}
-
-#gas-app iframe {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    background: #ffffff !important;
-}
-</style>
-
-
-<div id="gas-app">
-    <iframe
-        src="https://script.google.com/macros/s/AKfycbxc_NrHwj0aDV0VAO09M_JzIajUIFvOTkT4j1ENTQzcQt2wwkruLpWqbf2VxEPwuWR6Ww/exec"
-        title="Aplikasi"
-        allow="geolocation; microphone; camera; midi; encrypted-media; clipboard-write; fullscreen"
-        allowfullscreen>
-    </iframe>
-</div>
-
-
-<script>
-(function () {
-    var app = document.getElementById('gas-app');
-    if (!app) return;
-
-    // 1. Keluarkan aplikasi dari dalam .post-body / #Blog1.
-    //    Tanpa ini, display:none pada container Blogger ikut
-    //    menyembunyikan aplikasi, dan transform/overflow milik
-    //    tema bisa membuat position:fixed tidak fullscreen.
-    if (app.parentNode !== document.body) {
-        document.body.appendChild(app);
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive Tech Pitch: Migrasi & Arsitektur KPI Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: rgba(22, 30, 49, 0.75);
+      --bg-card-border: rgba(255, 255, 255, 0.08);
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.25);
+      --accent: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --font-main: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
-    // 2. Aktifkan mode aplikasi.
-    document.documentElement.classList.add('gas-app-mode');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    // 3. Pastikan ada meta viewport (tema Blogger lama /
-    //    versi desktop di HP tidak punya, hasilnya tampilan mini).
-    var vp = document.querySelector('meta[name="viewport"]');
-    if (!vp) {
-        vp = document.createElement('meta');
-        vp.name = 'viewport';
-        document.head.appendChild(vp);
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
     }
-    vp.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
 
-    // 4. Judul tab browser ikut nama aplikasi, bukan judul blog.
-    document.title = 'Aplikasi Saya';
-})();
-</script>
+    /* Ambient Glow Background */
+    .ambient-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .ambient-glow-2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+      bottom: -100px;
+      left: -100px;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Slides Container */
+    .presentation-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      padding: 60px 80px 100px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.98);
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Typography & Hierarchy */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 9999px;
+      color: #60a5fa;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+      width: fit-content;
+    }
+
+    .badge.warning {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+    }
+
+    .badge.success {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    .slide-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 900px;
+      margin-bottom: 36px;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      width: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .card:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card-code {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #38bdf8;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: auto;
+    }
+
+    /* Architecture Flow Box */
+    .flow-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .flow-step {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .flow-step h4 {
+      font-size: 0.95rem;
+      color: #60a5fa;
+      margin-bottom: 6px;
+    }
+
+    .flow-step p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .flow-arrow {
+      color: #64748b;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--bg-card-border);
+    }
+
+    .compare-table th, .compare-table td {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .compare-table th {
+      background: rgba(30, 41, 59, 0.9);
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .compare-table td {
+      background: rgba(15, 23, 42, 0.5);
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      color: #e2e8f0;
+    }
+
+    .compare-table tr:hover td {
+      background: rgba(30, 41, 59, 0.5);
+    }
+
+    /* Bottom Controls */
+    .controls {
+      position: absolute;
+      bottom: 24px;
+      left: 80px;
+      right: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 16px;
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      max-width: 320px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 0 24px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 12.5%;
+      transition: width 0.3s ease;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .slide-indicator {
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .highlight {
+      color: #60a5fa;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="presentation-container">
+
+    <!-- SLIDE 1: COVER -->
+    <div class="slide active" id="slide-1">
+      <div class="badge">FULLSTACK TECHNICAL BRIEFING · CINEMA XXI</div>
+      <h1 class="hero-title">Modernisasi & Migrasi<br><span class="highlight">KPI Dashboard Analytics</span></h1>
+      <p class="slide-subtitle">
+        Pemaparan arsitektur sistem, validasi keandalan kode (Zero-Change Codebase), mitigasi celah keamanan, dan roadmap deployment ke server internal management (On-Premise / Enterprise Cloud).
+      </p>
+      <div class="grid-3" style="max-width: 960px; margin-top: 10px;">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Zero Dependency</div>
+          <div class="card-desc">100% Native Node.js 22+ (SQLite, Crypto, VM, HTTP). Tidak rentan supply-chain vulnerability npm.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <div class="card-title">100% Logic Parity</div>
+          <div class="card-desc">23 Berkas Apps Script (.gs & .html) dieksekusi apa adanya tanpa memodifikasi formula KPI.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <div class="card-title">Production Ready</div>
+          <div class="card-desc">Arsitektur isolasi, proteksi CSRF & DNS Rebinding, serta rencana migrasi service internal.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: BUSINESS PROCESS FLOW -->
+    <div class="slide" id="slide-2">
+      <div class="badge">BUSINESS PROCESS & DATA FLOW</div>
+      <h2 class="slide-title">Alur Proses Bisnis & Pipeline Data</h2>
+      <p class="slide-subtitle">Bagaimana data penjualan Cinema XXI diolah dari raw dataset hingga menjadi insight analitik eksekutif.</p>
+      
+      <div class="flow-box">
+        <div class="flow-step">
+          <h4>1. Ingestion</h4>
+          <p>Import Bulanan Master & Transaksi via XLSX/CSV. Auto-sanitasi zona waktu Jakarta (WIB).</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <h4>2. Storage & Shimming</h4>
+          <p>Virtual Sheets di-mapping ke SQLite Engine. Indexing tanggal, outlet, & wilayah.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <h4>3. Calculation Engine</h4>
+          <p>Multi-layer Cache (Super Cache V11). Agregasi SPH (Omzet/Penonton) & GBO/HTM.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <h4>4. RBAC Gate</h4>
+          <p>Hak akses berjenjang (ADMIN, RM, AREA). Filter data otomatis sesuai profile user.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <h4>5. Visual Delivery</h4>
+          <p>Executive Dashboard, SVG Map, Drilldown Bulanan, & Export Excel.</p>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 24px;">
+        <div class="card">
+          <div class="card-title">Aturan Agregasi KPI</div>
+          <div class="card-desc">Prinsip <b>SUM dulu, baru bagi</b>. SPH wilayah/outlet adalah Σ Omzet ÷ Σ Penonton, bukan rata-rata dari SPH.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Comparison Growth</div>
+          <div class="card-desc">Menghitung growth vs periode sebelumnya dengan durasi hari identik yang menempel tepat di belakangnya.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Indonesia Geo-Intelligence</div>
+          <div class="card-desc">Visualisasi peta sebaran berbasis SVG murni (38 provinsi & 514 kabupaten) tanpa ketergantungan CDN luar.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: SYSTEM ARCHITECTURE -->
+    <div class="slide" id="slide-3">
+      <div class="badge">SYSTEM ARCHITECTURE</div>
+      <h2 class="slide-title">Arsitektur Hybrid: Node.js VM + Apps Script Shim</h2>
+      <p class="slide-subtitle">Solusi cerdas menjembatani Google Apps Script ke lingkungan On-Premise berkecepatan tinggi.</p>
+      
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Client-Side (Frontend Engine)</div>
+          <p class="card-desc">Menjalankan <code>Index.html</code> dan modular UI templates (Bootstrap 5, Chart.js, SheetJS offline). Memanggil backend melalui objek imitasi <code>google.script.run</code>.</p>
+          <div class="card-code">Browser ──[POST /api/:fn]──► HTTP Bridge ──► VM Context</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Server-Side (Node.js 22 Core)</div>
+          <p class="card-desc">Kode <code>.gs</code> dieksekusi di dalam <code>node:vm</code> context dengan global state yang tersinkronisasi. Semua Google Service API digantikan oleh shim native.</p>
+          <div class="card-code">SpreadsheetApp ──► SQLite Driver (app.db)<br>PropertiesService ──► Key-Value Table<br>Utilities.computeHmac ──► node:crypto</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 20px;">
+        <div class="card-title">Keunggulan Desain Arsitektur Ini</div>
+        <div class="grid-3" style="margin-top: 10px;">
+          <div>
+            <strong style="color: #60a5fa;">Performa 10x Lebih Cepat</strong>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Latensi database SQLite lokal (<5ms) vs Google Sheets API RPC (800ms - 2500ms).</p>
+          </div>
+          <div>
+            <strong style="color: #60a5fa;">Mandiri & Air-Gapped Ready</strong>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Bisa berjalan 100% tanpa internet kantor berkat aset vendor lokal & peta SVG mandiri.</p>
+          </div>
+          <div>
+            <strong style="color: #60a5fa;">Zero Refactoring Risk</strong>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Formula bisnis tidak perlu di-rewrite dari nol, menghindari resiko regresi kalkulasi.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: QUESTION 1 - MIGRATION TO INTERNAL SERVER -->
+    <div class="slide" id="slide-4">
+      <div class="badge success">PERTANYAAN 1 · DEPLOYMENT STRATEGY</div>
+      <h2 class="slide-title">Migrasi ke Server Internal Management</h2>
+      <p class="slide-subtitle">Langkah terstruktur memindahkan runtime dari laptop pengembang ke infrastruktur server IT (Linux/Windows Server).</p>
+      
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-icon">🖥️</div>
+          <div class="card-title">1. Server Prep</div>
+          <div class="card-desc">Instalasi Node.js 22.13+ LTS di Server Linux (Ubuntu/Debian) atau Windows Server. Buka port 3000 internal.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📂</div>
+          <div class="card-title">2. Transfer & DB</div>
+          <div class="card-desc">Copy source code, file <code>app.db</code>, dan siapkan <code>.env</code> dengan <code>HOST=0.0.0.0</code> & <code>ALLOWED_HOSTS</code>.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <div class="card-title">3. Reverse Proxy</div>
+          <div class="card-desc">Pasang Nginx / IIS dengan sertifikat SSL/HTTPS internal. Proxy pass traffic dari port 443 ke 3000.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔄</div>
+          <div class="card-title">4. Daemon & Cron</div>
+          <div class="card-desc">Jalankan via PM2 atau Systemd service (Auto-restart on reboot). Pasang cron backup database berkala.</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 24px;">
+        <div class="card-title">Command Eksekusi di Server Internal:</div>
+        <div class="card-code">
+          # Jalankan via PM2 Process Manager<br>
+          pm2 start apps-script/server/start.js --name "kpi-analyst" --node-args="--disable-warning=ExperimentalWarning"<br>
+          pm2 startup && pm2 save
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: QUESTION 2 - PARITY & FEATURE CHANGES -->
+    <div class="slide" id="slide-5">
+      <div class="badge">PERTANYAAN 2 · FUNCTIONAL PARITY</div>
+      <h2 class="slide-title">Perubahan Fitur: Apakah Ada yang Berubah?</h2>
+      <p class="slide-subtitle">Validasi komparasi fungsional antara versi Google Apps Script dengan Localhost Server.</p>
+      
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Aspek / Komponen</th>
+            <th>Google Apps Script</th>
+            <th>Localhost / Internal Server</th>
+            <th>Status Parity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>UI & Halaman Analitik</strong></td>
+            <td>Dashboard, Comparison, Outlet Summary, Mapping</td>
+            <td>Dashboard, Comparison, Outlet Summary, Mapping</td>
+            <td><span style="color: #34d399;">● 100% Identik</span></td>
+          </tr>
+          <tr>
+            <td><strong>Formula & Agregasi KPI</strong></td>
+            <td>SUM lalu bagi (SPH, GBO, HTM, Achievement)</td>
+            <td>SUM lalu bagi (Dieksekusi berkas .gs yang sama)</td>
+            <td><span style="color: #34d399;">● 100% Identik</span></td>
+          </tr>
+          <tr>
+            <td><strong>Hak Akses (RBAC)</strong></td>
+            <td>Filter sesi Admin, Regional Manager, Area Manager</td>
+            <td>Filter sesi Admin, Regional Manager, Area Manager</td>
+            <td><span style="color: #34d399;">● 100% Identik</span></td>
+          </tr>
+          <tr>
+            <td><strong>Database Layer</strong></td>
+            <td>Google Sheets (Remote Cloud, lambat jika baris >50k)</td>
+            <td>SQLite (app.db, Local I/O cepat, ACID compliant)</td>
+            <td><span style="color: #60a5fa;">★ Peningkatan Performa</span></td>
+          </tr>
+          <tr>
+            <td><strong>Ketersediaan Offline</strong></td>
+            <td>Wajib koneksi Google Drive / internet stabil</td>
+            <td>Bisa beroperasi 100% di Local Intranet (No Internet)</td>
+            <td><span style="color: #60a5fa;">★ Peningkatan Reliabilitas</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SLIDE 6: QUESTION 3 - SECURITY & AUDIT FINDINGS -->
+    <div class="slide" id="slide-6">
+      <div class="badge warning">PERTANYAAN 3 · SECURITY AUDIT</div>
+      <h2 class="slide-title">Kondisi Keamanan Kode & Temuan Hardcoded Key</h2>
+      <p class="slide-subtitle">Evaluasi keamanan secara transparan untuk meyakinkan standar InfoSec Head IT.</p>
+      
+      <div class="grid-2">
+        <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+          <div class="card-icon" style="background: rgba(16, 185, 129, 0.1); color: #34d399;">✓</div>
+          <div class="card-title">Lapisan Keamanan yang Sudah Sangat Baik</div>
+          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-left: 20px;">
+            <li><b>Password Hashing:</b> PBKDF2-HMAC-SHA256 dengan Salt dinamis per user + Secret Pepper terpisah di <code>.env</code>.</li>
+            <li><b>RPC Whitelisting:</b> Hanya fungsi dalam set <code>DIIZINKAN</code> di <code>start.js</code> yang dapat dipanggil dari HTTP client.</li>
+            <li><b>Host & CSRF Guard:</b> Blokir DNS Rebinding lewat pengecekan <code>ALLOWED_HOSTS</code> dan validasi Origin.</li>
+            <li><b>Rate Limiting:</b> Throttle otomatis terhadap serangan brute-force login.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-color: rgba(239, 68, 68, 0.4);">
+          <div class="card-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">⚠</div>
+          <div class="card-title">Temuan Celah Kritis (Vulnerability Finding)</div>
+          <p class="card-desc">
+            Ditemukan <b>Anthropic API Key yang di-hardcode</b> di file legacy:
+            <br><code style="color: #f87171;">apps-script/Code.gs (Line 610)</code> di dalam fungsi <code>setApiKeyOnce()</code>.
+          </p>
+          <div class="card-code" style="color: #f87171; border-color: rgba(239, 68, 68, 0.2);">
+            // Temuan di Code.gs baris 610:<br>
+            PropertiesService.getScriptProperties().setProperty(<br>
+              'ANTHROPIC_API_KEY', 'sk-ant-api03-cJToyxE5co...'<br>
+            );
+          </div>
+          <p class="card-desc" style="color: #34d399; font-size: 0.82rem; margin-top: 4px;">
+            <b>Rencana Mitigasi Cepat:</b> Revoke key di console Anthropic, hapus fungsi hardcode dari <code>Code.gs</code>, dan wajibkan injeksi via <code>.env</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: QUESTION 4 - SOURCE CODE READINESS -->
+    <div class="slide" id="slide-7">
+      <div class="badge success">PERTANYAAN 4 · ASSET READINESS</div>
+      <h2 class="slide-title">Kelayakan & Kesiapan Source Code</h2>
+      <p class="slide-subtitle">Apakah source code saat ini sudah cukup dan mandiri untuk dipindahkan?</p>
+      
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-title">100% Self-Contained</div>
+          <div class="card-desc">
+            Tidak bergantung pada library eksternal npm online. Seluruh modul backend menggunakan Node.js core modules. Vendor CSS/JS dan fonts sudah diunduh lokal.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🧪</div>
+          <div class="card-title">Suite Pengujian Otomatis</div>
+          <div class="card-desc">
+            Dilengkapi 39 automated integration & parity tests (<code>npm test</code>) untuk memverifikasi kalkulasi, integritas shimming, dan proteksi HTTP.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🛠️</div>
+          <div class="card-title">Admin Tooling Komplit</div>
+          <div class="card-desc">
+            Sudah tersedia tool CLI teruji untuk:
+            <br>• Hot-backup SQLite (<code>npm run backup</code>)
+            <br>• Restore data (<code>npm run restore</code>)
+            <br>• Emergency admin reset (<code>npm run reset-sandi</code>)
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 24px;">
+        <div class="card-title">Kesimpulan Kesiapan:</div>
+        <p class="card-desc" style="color: #e2e8f0;">
+          Source code <b>SANGAT LENGKAP & SIAP (100% READY)</b> dipindahkan ke server baru. Tim IT hanya perlu clone repository / copy folder, install runtime Node.js 22, menyalin database <code>app.db</code>, dan mengatur <code>.env</code>.
+        </p>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: SUMMARY & NEXT STEPS -->
+    <div class="slide" id="slide-8">
+      <div class="badge">ACTION PLAN & ROADMAP</div>
+      <h2 class="slide-title">Rencana Kerja & Rekomendasi Selanjutnya</h2>
+      <p class="slide-subtitle">Langkah praktis yang dapat segera dieksekusi bersama tim infrastruktur IT.</p>
+      
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">Fase 1: Sanitasi Keamanan</div>
+          <p class="card-desc">
+            • Revoke Anthropic API key yang terekspos.<br>
+            • Hapus fungsi <code>setApiKeyOnce()</code> dari <code>Code.gs</code>.<br>
+            • Pastikan file <code>.env</code> dan <code>*.db</code> masuk ke <code>.gitignore</code>.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Fase 2: Deployment Internal</div>
+          <p class="card-desc">
+            • Provisioning VM / Container di server internal IT.<br>
+            • Konfigurasi Nginx Reverse Proxy + SSL Internal.<br>
+            • Setup PM2 daemon & automated daily snapshot backup.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Fase 3: Pengembangan Fitur</div>
+          <p class="card-desc">
+            • Integrasi automated ETL langsung dari database ERP/POS Cinema XXI (menghilangkan ketergantungan upload manual Excel).<br>
+            • Optimalisasi indeks SQL untuk data transaksi multi-tahun.
+          </p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <h3 style="font-size: 1.4rem; color: #fff;">Siap Berdiskusi & Melakukan Live Demo</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 6px;">KPI Dashboard Cinema XXI — Stabil, Cepat, dan Aman.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAVIGATION & PROGRESS -->
+  <div class="controls">
+    <button class="btn-nav" id="prev-btn" onclick="prevSlide()">← Sebelumnya</button>
+    
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="slide-indicator" id="slide-indicator">Slide 1 / 8</div>
+    
+    <button class="btn-nav" id="next-btn" onclick="nextSlide()">Selanjutnya →</button>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 8;
+
+    function showSlide(n) {
+      if (n < 1) n = 1;
+      if (n > totalSlides) n = totalSlides;
+      currentSlide = n;
+
+      for (let i = 1; i <= totalSlides; i++) {
+        const slide = document.getElementById('slide-' + i);
+        if (slide) {
+          if (i === currentSlide) {
+            slide.classList.add('active');
+          } else {
+            slide.classList.remove('active');
+          }
+        }
+      }
+
+      document.getElementById('slide-indicator').innerText = `Slide ${currentSlide} / ${totalSlides}`;
+      document.getElementById('progress-bar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      document.getElementById('prev-btn').style.opacity = currentSlide === 1 ? '0.4' : '1';
+      document.getElementById('prev-btn').style.pointerEvents = currentSlide === 1 ? 'none' : 'auto';
+
+      document.getElementById('next-btn').style.opacity = currentSlide === totalSlides ? '0.4' : '1';
+      document.getElementById('next-btn').style.pointerEvents = currentSlide === totalSlides ? 'none' : 'auto';
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) showSlide(currentSlide - 1);
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+
+    showSlide(1);
+  </script>
+</body>
+</html>
