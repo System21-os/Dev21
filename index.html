@@ -1,0 +1,112 @@
+<!-- =========================================================
+     BLOGSPOT → FULLSCREEN GOOGLE APPS SCRIPT APP
+     Tempel di Postingan / Halaman Blogger lewat mode "Tampilan HTML".
+     ========================================================= -->
+
+<style>
+/* ---------------------------------------------------------
+   1. ANTI-KEDIP (sebelum JS jalan)
+   Pakai visibility, BUKAN display:none, karena anak dari
+   elemen visibility:hidden tetap bisa dibuat visible.
+   --------------------------------------------------------- */
+body * {
+    visibility: hidden !important;
+}
+
+#gas-app,
+#gas-app * {
+    visibility: visible !important;
+}
+
+/* ---------------------------------------------------------
+   2. MODE APLIKASI (class dipasang oleh JS di bawah)
+   Setelah #gas-app dipindah jadi anak langsung <body>,
+   semua elemen Blogger lain dimatikan total.
+   --------------------------------------------------------- */
+html.gas-app-mode,
+html.gas-app-mode body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    overscroll-behavior: none;
+}
+
+html.gas-app-mode body > *:not(#gas-app) {
+    display: none !important;
+}
+
+/* ---------------------------------------------------------
+   3. WRAPPER & IFRAME
+   --------------------------------------------------------- */
+#gas-app {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+    z-index: 2147483647 !important;
+    background: #ffffff !important;
+    transform: none !important;
+}
+
+#gas-app iframe {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: #ffffff !important;
+}
+</style>
+
+
+<div id="gas-app">
+    <iframe
+        src="https://script.google.com/macros/s/AKfycbxc_NrHwj0aDV0VAO09M_JzIajUIFvOTkT4j1ENTQzcQt2wwkruLpWqbf2VxEPwuWR6Ww/exec"
+        title="Aplikasi"
+        allow="geolocation; microphone; camera; midi; encrypted-media; clipboard-write; fullscreen"
+        allowfullscreen>
+    </iframe>
+</div>
+
+
+<script>
+(function () {
+    var app = document.getElementById('gas-app');
+    if (!app) return;
+
+    // 1. Keluarkan aplikasi dari dalam .post-body / #Blog1.
+    //    Tanpa ini, display:none pada container Blogger ikut
+    //    menyembunyikan aplikasi, dan transform/overflow milik
+    //    tema bisa membuat position:fixed tidak fullscreen.
+    if (app.parentNode !== document.body) {
+        document.body.appendChild(app);
+    }
+
+    // 2. Aktifkan mode aplikasi.
+    document.documentElement.classList.add('gas-app-mode');
+
+    // 3. Pastikan ada meta viewport (tema Blogger lama /
+    //    versi desktop di HP tidak punya, hasilnya tampilan mini).
+    var vp = document.querySelector('meta[name="viewport"]');
+    if (!vp) {
+        vp = document.createElement('meta');
+        vp.name = 'viewport';
+        document.head.appendChild(vp);
+    }
+    vp.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
+
+    // 4. Judul tab browser ikut nama aplikasi, bukan judul blog.
+    document.title = 'Aplikasi Saya';
+})();
+</script>
