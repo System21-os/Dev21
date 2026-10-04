@@ -1,752 +1,533 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Executive Briefing: PRD, Visi Server Profesional & Workflow Migrasi KPI Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-dark: #080b11;
-      --bg-card: rgba(18, 24, 38, 0.85);
-      --bg-card-hover: rgba(26, 35, 56, 0.95);
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(59, 130, 246, 0.5);
-      --primary: #3b82f6;
-      --primary-light: #60a5fa;
-      --accent: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --purple: #8b5cf6;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
-      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KPI Dashboard Cinema XXI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080b11; --card:rgba(18,24,38,.86); --card-h:rgba(26,35,56,.96);
+    --line:rgba(255,255,255,.08); --glow:rgba(59,130,246,.5);
+    --blue:#3b82f6; --blue-l:#60a5fa; --green:#34d399; --amber:#fbbf24; --red:#f87171; --violet:#c084fc; --cyan:#38bdf8;
+    --tx:#f8fafc; --mut:#94a3b8; --dim:#64748b;
+    --sans:'Plus Jakarta Sans',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx);font-family:var(--sans);overflow:hidden;height:100vh;width:100vw;-webkit-font-smoothing:antialiased}
+  .amb{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .g1,.g2{position:absolute;border-radius:50%;filter:blur(100px)}
+  .g1{width:700px;height:700px;top:-220px;right:-120px;background:radial-gradient(circle,rgba(59,130,246,.18),transparent 65%)}
+  .g2{width:650px;height:650px;bottom:-180px;left:-120px;background:radial-gradient(circle,rgba(16,185,129,.13),transparent 65%)}
+  .grid-bg{position:absolute;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:48px 48px}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  .wrap{position:relative;width:100%;height:100%;z-index:2}
+  .slide{position:absolute;inset:0;padding:42px 64px 96px;display:flex;flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transform:translateY(18px) scale(.988);transition:all .4s cubic-bezier(.16,1,.3,1);overflow-y:auto}
+  .slide.active{opacity:1;visibility:visible;transform:none}
+  .slide::-webkit-scrollbar,.scroll::-webkit-scrollbar{width:6px}
+  .slide::-webkit-scrollbar-thumb,.scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:4px}
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-sans);
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
-      user-select: none;
-      -webkit-font-smoothing: antialiased;
-    }
+  .tag{display:inline-flex;gap:8px;align-items:center;padding:5px 15px;border-radius:999px;font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-bottom:14px;width:fit-content;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);color:var(--blue-l)}
+  .tag.g{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:var(--green)}
+  .tag.v{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.35);color:var(--violet)}
+  .tag.a{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35);color:var(--amber)}
+  h1.hl,h2.hl{font-weight:800;line-height:1.15;letter-spacing:-.025em;margin-bottom:12px;background:linear-gradient(135deg,#fff 10%,#cbd5e1 90%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  h2.hl{font-size:2.3rem}
+  .sub{font-size:1.05rem;color:var(--mut);line-height:1.6;max-width:1000px;margin-bottom:22px}
+  .grad{background:linear-gradient(120deg,#60a5fa,#a78bfa 50%,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-    /* Ambient Lighting */
-    .ambient-bg {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .glow-1 {
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 65%);
-      top: -200px;
-      right: -100px;
-      filter: blur(100px);
-    }
-    .glow-2 {
-      position: absolute;
-      width: 650px;
-      height: 650px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, transparent 65%);
-      bottom: -150px;
-      left: -100px;
-      filter: blur(100px);
-    }
+  .g2c{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .g3c{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .g4c{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;backdrop-filter:blur(20px);display:flex;flex-direction:column;gap:9px;transition:all .25s}
+  .card:hover{background:var(--card-h);border-color:var(--glow);transform:translateY(-2px)}
+  .ic{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+  .ct{font-size:1.05rem;font-weight:700;color:#fff}
+  .cd{font-size:.86rem;color:var(--mut);line-height:1.55}
+  .cd b{color:#e2e8f0}
+  ul.l{font-size:.85rem;color:var(--mut);line-height:1.65;margin-left:17px}
+  ul.l b{color:#e2e8f0}
+  code{font-family:var(--mono);font-size:.8em;background:rgba(0,0,0,.4);padding:1px 6px;border-radius:5px;color:var(--cyan)}
+  .pill{font-family:var(--mono);font-size:.76rem;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:7px 11px;color:var(--cyan);margin-top:auto}
+  .note{background:rgba(15,23,42,.65);border:1px dashed rgba(59,130,246,.4);border-radius:12px;padding:13px 17px;font-size:.86rem;color:#93c5fd;line-height:1.5;display:flex;gap:10px}
+  .chip{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;margin:2px 3px 0 0;letter-spacing:.03em}
+  .c-all{background:rgba(52,211,153,.14);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+  .c-adm{background:rgba(248,113,113,.14);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+  .c-rm{background:rgba(251,191,36,.14);color:var(--amber);border:1px solid rgba(251,191,36,.3)}
+  .c-area{background:rgba(56,189,248,.14);color:var(--cyan);border:1px solid rgba(56,189,248,.3)}
 
-    /* Grid Line */
-    .grid-lines {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 1;
-    }
+  /* workflow */
+  .wf{display:flex;gap:12px;align-items:stretch;margin-bottom:20px}
+  .wfs{flex:1;background:rgba(20,27,44,.85);border:1px solid var(--line);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;transition:all .25s}
+  .wfs:hover{border-color:var(--blue);transform:translateY(-2px)}
+  .wfb{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--cyan);background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);padding:3px 10px;border-radius:999px;width:fit-content;margin-bottom:10px}
+  .wfs h4{font-size:1rem;margin-bottom:6px}
+  .wfs p{font-size:.81rem;color:var(--mut);line-height:1.5}
+  .arr{align-self:center;color:var(--dim);font-size:1.3rem;font-weight:700}
 
-    /* Slide Container */
-    .slides-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-    }
+  /* sidebar mock */
+  .sbm{background:#0f1626;border:1px solid var(--line);border-radius:16px;padding:16px 14px;font-size:.84rem}
+  .sbm .sec{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700;margin:12px 6px 6px}
+  .sbm .sec:first-child{margin-top:0}
+  .sbm .it{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;color:#cbd5e1}
+  .sbm .it:hover{background:rgba(59,130,246,.12)}
+  .sbm .it .nm{display:flex;gap:9px;align-items:center;font-weight:600}
+  .sbm .sub-it{padding:3px 10px 3px 36px;color:var(--dim);font-size:.76rem}
 
-    .slide {
-      position: absolute;
-      inset: 0;
-      padding: 50px 70px 100px 70px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(20px) scale(0.985);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      overflow-y: auto;
-    }
+  /* table */
+  table.t{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  table.t th{background:rgba(26,35,56,.9);padding:10px 14px;text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+  table.t td{background:rgba(15,22,36,.6);padding:9px 14px;font-size:.82rem;border-top:1px solid rgba(255,255,255,.04);color:#e2e8f0;vertical-align:top}
+  table.t td.k{font-family:var(--mono);color:var(--blue-l);font-weight:700;white-space:nowrap}
 
-    .slide.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0) scale(1);
-    }
+  /* file catalog */
+  .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .tab{background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--mut);padding:7px 15px;border-radius:10px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .2s}
+  .tab.on,.tab:hover{background:rgba(59,130,246,.2);border-color:var(--blue);color:#fff}
+  .scroll{max-height:56vh;overflow-y:auto;padding-right:6px}
+  .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+  .fi{background:rgba(14,19,31,.75);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px 15px;display:flex;flex-direction:column;gap:4px}
+  .fi:hover{border-color:rgba(59,130,246,.45);background:rgba(20,27,44,.9)}
+  .fn{font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--blue-l)}
+  .fp{font-size:.79rem;color:var(--mut);line-height:1.45}
+  .fl{font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 
-    /* Typography & Hierarchy */
-    .badge-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      background: rgba(59, 130, 246, 0.12);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 9999px;
-      color: var(--primary-light);
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      margin-bottom: 16px;
-      width: fit-content;
-    }
-    .badge-tag.accent {
-      background: rgba(16, 185, 129, 0.12);
-      border-color: rgba(16, 185, 129, 0.35);
-      color: #34d399;
-    }
-    .badge-tag.purple {
-      background: rgba(139, 92, 246, 0.12);
-      border-color: rgba(139, 92, 246, 0.35);
-      color: #c084fc;
-    }
-    .badge-tag.warning {
-      background: rgba(245, 158, 11, 0.12);
-      border-color: rgba(245, 158, 11, 0.35);
-      color: #fbbf24;
-    }
-
-    .slide-headline {
-      font-size: 2.6rem;
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.025em;
-      margin-bottom: 14px;
-      background: linear-gradient(135deg, #ffffff 10%, #cbd5e1 90%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .slide-subtitle {
-      font-size: 1.12rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      max-width: 980px;
-      margin-bottom: 28px;
-    }
-
-    .gradient-text {
-      background: linear-gradient(120deg, #60a5fa 0%, #a78bfa 50%, #34d399 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Grids & Cards */
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; width: 100%; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; width: 100%; }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 24px;
-      backdrop-filter: blur(20px);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      transition: all 0.25s ease;
-    }
-
-    .card:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-glow);
-      transform: translateY(-3px);
-    }
-
-    .card-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-    }
-
-    .card-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .card-desc {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .analogy-box {
-      background: rgba(15, 23, 42, 0.65);
-      border: 1px dashed rgba(59, 130, 246, 0.4);
-      border-radius: 12px;
-      padding: 14px 18px;
-      font-size: 0.88rem;
-      color: #93c5fd;
-      line-height: 1.5;
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    /* Workflow Diagram */
-    .wf-container {
-      display: flex;
-      gap: 14px;
-      align-items: stretch;
-      margin-top: 10px;
-      margin-bottom: 24px;
-    }
-
-    .wf-step {
-      flex: 1;
-      background: rgba(20, 27, 44, 0.85);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 22px 18px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: all 0.25s;
-    }
-
-    .wf-step:hover {
-      border-color: var(--primary);
-      transform: translateY(-3px);
-    }
-
-    .wf-badge {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 4px 10px;
-      border-radius: 9999px;
-      width: fit-content;
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-
-    .wf-step h4 {
-      font-size: 1.05rem;
-      color: #fff;
-      margin-bottom: 8px;
-      font-weight: 700;
-    }
-
-    .wf-step p {
-      font-size: 0.84rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .wf-arrow {
-      align-self: center;
-      color: var(--text-dim);
-      font-size: 1.4rem;
-      font-weight: bold;
-    }
-
-    /* Code Pill */
-    .code-pill {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      padding: 8px 12px;
-      color: #38bdf8;
-      margin-top: auto;
-    }
-
-    /* Bottom Navigation */
-    .bottom-bar {
-      position: absolute;
-      bottom: 24px;
-      left: 70px;
-      right: 70px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      padding-top: 16px;
-    }
-
-    .progress-track {
-      flex: 1;
-      max-width: 380px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
-      overflow: hidden;
-      margin: 0 24px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      width: 12.5%;
-      transition: width 0.3s ease;
-    }
-
-    .nav-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #fff;
-      padding: 8px 20px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
-    }
-
-    .nav-btn:hover {
-      background: var(--primary);
-      border-color: var(--primary);
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-    }
-
-    .slide-counter {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--text-dim);
-    }
-
-    .key-hint {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-    .kbd {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-      padding: 2px 6px;
-      color: #cbd5e1;
-    }
-  </style>
+  /* bar */
+  .bar{position:absolute;bottom:22px;left:64px;right:64px;display:flex;justify-content:space-between;align-items:center;z-index:10;border-top:1px solid rgba(255,255,255,.06);padding-top:14px}
+  .trk{flex:1;max-width:360px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin:0 22px}
+  .fill{height:100%;background:linear-gradient(90deg,var(--blue),#10b981);transition:width .3s}
+  .nb{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;padding:7px 18px;border-radius:10px;font-size:.84rem;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .2s}
+  .nb:hover{background:var(--blue);border-color:var(--blue)}
+  .cnt,.hint{font-family:var(--mono);font-size:.78rem;color:var(--dim)}
+  .kbd{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:4px;padding:1px 6px;color:#cbd5e1}
+</style>
 </head>
 <body>
+<div class="amb"><div class="g1"></div><div class="g2"></div></div>
+<div class="grid-bg"></div>
 
-  <div class="ambient-bg">
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
+<div class="wrap">
+
+<!-- ═════════════ 1. COVER ═════════════ -->
+<div class="slide active" id="s1">
+  <div class="tag">EXECUTIVE BRIEFING · CINEMA XXI</div>
+  <h1 class="hl" style="font-size:3.2rem">Transformasi Menuju <span class="grad">Server Profesional</span><br>KPI Dashboard Analytics</h1>
+  <p class="sub" style="font-size:1.15rem">Meninggalkan keterbatasan Google Apps Script menuju platform mandiri yang cepat, aman, dan siap di-hosting untuk seluruh manajemen.</p>
+  <div class="g4c" style="max-width:1150px">
+    <div class="card"><div class="ic">🎯</div><div class="ct">PRD Produk</div><div class="cd">Untuk siapa, masalah apa, dan ukuran keberhasilannya.</div></div>
+    <div class="card"><div class="ic">🧭</div><div class="ct">Tur Fitur Aplikasi</div><div class="cd">Isi setiap menu sidebar dan fungsi tiap tombol di layar.</div></div>
+    <div class="card"><div class="ic">🗂️</div><div class="ct">Katalog File</div><div class="cd">Kegunaan setiap file kode di dalam folder proyek.</div></div>
+    <div class="card"><div class="ic">🚀</div><div class="ct">Workflow Migrasi</div><div class="cd">Dari laptop pengembang sampai online di domain kantor.</div></div>
   </div>
-  <div class="grid-lines"></div>
+</div>
 
-  <div class="slides-wrapper">
-
-    <!-- SLIDE 1: COVER STRATEGIS -->
-    <div class="slide active" id="slide-1">
-      <div class="badge-tag">EXECUTIVE STRATEGY BRIEFING · CINEMA XXI</div>
-      <h1 class="slide-headline" style="font-size: 3.3rem;">
-        Transformasi Menuju <span class="gradient-text">Server Profesional</span><br>
-        KPI Dashboard Analytics
-      </h1>
-      <p class="slide-subtitle" style="font-size: 1.2rem;">
-        Menghadirkan keandalan analitik performa bioskop: Meninggalkan keterbatasan Google Apps Script menuju platform mandiri, cepat, dan siap di-hosting publik untuk manajemen.
-      </p>
-
-      <div class="grid-3" style="max-width: 1050px; margin-top: 10px;">
-        <div class="card">
-          <div class="card-icon" style="color: #60a5fa;">🎯</div>
-          <div class="card-title">Fokus PRD Produk</div>
-          <div class="card-desc">Dirancang spesifik untuk kebutuhan Direksi, Regional Manager, dan Bioskop dalam memantau penjualan harian F&B dan Tiket.</div>
-        </div>
-        <div class="card">
-          <div class="card-icon" style="color: #34d399;">🏢</div>
-          <div class="card-title">Bukan Lagi Apps Script</div>
-          <div class="card-desc">Apps Script hanya prototipe awal. Arah masa depan adalah sistem server internal korporat yang stabil tanpa kuota Google.</div>
-        </div>
-        <div class="card">
-          <div class="card-icon" style="color: #a78bfa;">🚀</div>
-          <div class="card-title">Siap Hosting Publik</div>
-          <div class="card-desc">Alur migrasi yang rapi dari laptop ke server internal, sehingga tim IT Dev tinggal mengarahkan domain web publik.</div>
-        </div>
-      </div>
+<!-- ═════════════ 2. WHY ═════════════ -->
+<div class="slide" id="s2">
+  <div class="tag v">ARAH PENGEMBANGAN</div>
+  <h2 class="hl">Mengapa Pindah ke Server Profesional?</h2>
+  <p class="sub">Apps Script sudah berjasa sebagai prototipe. Mulai sekarang, seluruh pengembangan difokuskan di server — bukan lagi di Apps Script.</p>
+  <div class="g2c">
+    <div class="card" style="border-color:rgba(248,113,113,.3)">
+      <div class="ic">🛑</div><div class="ct">Dulu: Google Apps Script</div>
+      <ul class="l">
+        <li><b>Terasa lambat</b> — setiap buka laporan harus membaca Google Sheets lewat internet.</li>
+        <li><b>Dibatasi Google</b> — satu proses maksimal 6 menit; data besar rawan gagal di tengah jalan.</li>
+        <li><b>Bergantung pihak luar</b> — jika akses Google terganggu, dashboard ikut berhenti.</li>
+        <li><b>Sulit dikelola tim IT</b> — tidak bisa dipantau, di-backup, atau diatur seperti server biasa.</li>
+      </ul>
     </div>
-
-    <!-- SLIDE 2: MENGAPA TINGGALKAN APPS SCRIPT? -->
-    <div class="slide" id="slide-2">
-      <div class="badge-tag purple">STRATEGIC PIVOT</div>
-      <h2 class="slide-headline">Mengapa Kita Harus Pindah ke Server Profesional?</h2>
-      <p class="slide-subtitle">Apps Script adalah solusi uji coba (prototipe). Untuk kebutuhan korporasi skala bioskop nasional, platform server mandiri adalah keharusan mutlak.</p>
-
-      <div class="grid-2">
-        <div class="card" style="border-color: rgba(239, 68, 68, 0.3);">
-          <div class="card-icon" style="color: #ef4444;">🛑</div>
-          <div class="card-title">Masa Lalu: Keterbatasan Google Apps Script</div>
-          <ul style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-left: 18px;">
-            <li><b>Kecepatan Terbatas:</b> Menunggu 5 - 15 detik saat membuka laporan karena harus membaca Google Sheets.</li>
-            <li><b>Batasan Kuota Harian:</b> Google membatasi waktu eksekusi maksimal 6 menit (rentan gagal saat memproses data besar).</li>
-            <li><b>Ketergantungan Eksternal:</b> Jika koneksi Google Drive lambat atau diblokir di jaringan bioskop, aplikasi mati total.</li>
-          </ul>
-        </div>
-
-        <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
-          <div class="card-icon" style="color: #34d399;">💎</div>
-          <div class="card-title">Masa Depan: Keunggulan Server Profesional Mandiri</div>
-          <ul style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-left: 18px;">
-            <li><b>Kecepatan Kilat (< 1 Detik):</b> Data tersimpan di basis data lokal SQLite berkecepatan tinggi.</li>
-            <li><b>Tanpa Batasan Kuota:</b> Mampu memproses ratusan ribu baris data transaksi bioskop tanpa batasan waktu.</li>
-            <li><b>100% Kontrol Internal:</b> Berjalan di infrastruktur server milik Cinema XXI sendiri, aman, dan bisa diakses intranet maupun publik.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="analogy-box" style="margin-top: 20px;">
-        <span style="font-size: 1.3rem;">💡</span>
-        <div>
-          <b>Analogi Sederhana untuk Manajemen:</b><br>
-          <i>"Apps Script itu seperti menyewa warung tenda di tanah orang lain—mudah dibuka tetapi dibatasi jam operasional dan cuaca. Sementara migrasi ke Server Profesional ini seperti membangun gedung ruko milik sendiri—bebas kita buka 24 jam, kokoh, dan siap menampung ribuan pengunjung."</i>
-        </div>
-      </div>
+    <div class="card" style="border-color:rgba(52,211,153,.4)">
+      <div class="ic">💎</div><div class="ct">Sekarang: Server Profesional Mandiri</div>
+      <ul class="l">
+        <li><b>Jauh lebih cepat</b> — data disimpan di database lokal (SQLite) di server sendiri.</li>
+        <li><b>Tanpa batas kuota</b> — ratusan ribu baris transaksi diproses tanpa batas waktu.</li>
+        <li><b>Dikendalikan penuh oleh IT</b> — backup terjadwal, pemantauan, dan hak akses di tangan kita.</li>
+        <li><b>Siap berkembang</b> — fitur baru bisa ditambah dengan alat pengembangan standar industri.</li>
+      </ul>
     </div>
-
-    <!-- SLIDE 3: PRD (PRODUCT REQUIREMENTS DOCUMENT) -->
-    <div class="slide" id="slide-3">
-      <div class="badge-tag accent">PRODUCT REQUIREMENTS (PRD)</div>
-      <h2 class="slide-headline">PRD: Definisi & Kebutuhan Produk</h2>
-      <p class="slide-subtitle">Gambaran komprehensif produk: Siapa penggunanya, apa masalah yang diselesaikan, dan apa ukuran keberhasilannya.</p>
-
-      <div class="grid-3">
-        <div class="card">
-          <div class="card-title">1. Masalah yang Diselesaikan</div>
-          <p class="card-desc">
-            Manajemen kesulitan memantau capaian target penjualan makanan/minuman (F&B) dan tiket di ratusan bioskop secara real-time karena laporan Excel terpisah-pisah dan lambat diolah.
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="card-title">2. Target Pengguna (Persona)</div>
-          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-left: 18px;">
-            <li><b>Direksi & Head Office:</b> Melihat performa nasional & ranking wilayah.</li>
-            <li><b>Regional Manager (RM):</b> Memantau bioskop di wilayah provinsinya.</li>
-            <li><b>Cinema Manager (Area):</b> Mengevaluasi capaian bulanan outletnya.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="card-title">3. Tolok Ukur Keberhasilan (KPI)</div>
-          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-left: 18px;">
-            <li><b>Integritas Finansial:</b> 100% akurasi kalkulasi SPH & GBO.</li>
-            <li><b>Waktu Akses:</b> Dashboard terbuka di bawah 1 detik.</li>
-            <li><b>Kemandirian Sistem:</b> 0% dependensi ke cloud luar.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top: 18px;">
-        <div class="card-title">4. Fitur-Fitur Kunci Produk (Core Features)</div>
-        <div class="grid-4" style="margin-top: 8px;">
-          <div>
-            <strong style="color: #60a5fa; font-size: 0.95rem;">Executive Overview</strong>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Kartu metrik Omzet F&B, Penonton, SPH, dan % pencapaian target bulanan.</p>
-          </div>
-          <div>
-            <strong style="color: #34d399; font-size: 0.95rem;">Peta Sebaran Nasional</strong>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Peta Indonesia (38 provinsi) interaktif tanpa butuh internet luar.</p>
-          </div>
-          <div>
-            <strong style="color: #c084fc; font-size: 0.95rem;">Outlet Drilldown</strong>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Analisis riwayat ketercapaian target per bioskop tiap bulannya.</p>
-          </div>
-          <div>
-            <strong style="color: #fbbf24; font-size: 0.95rem;">Asisten Analisis AI</strong>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Chatbox cerdas untuk merangkum tren penjualan secara instan.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 4: PROSES BISNIS SEHARI-HARI -->
-    <div class="slide" id="slide-4">
-      <div class="badge-tag">DAILY BUSINESS PROCESS</div>
-      <h2 class="slide-headline">Alur Kerja Bisnis Sehari-hari</h2>
-      <p class="slide-subtitle">Bagaimana tim operasional menggunakan aplikasi ini mulai dari input data hingga terbitnya laporan eksekutif.</p>
-
-      <div class="wf-container">
-        <div class="wf-step">
-          <div class="wf-badge">LANGKAH 1</div>
-          <h4>Upload Data Penjualan</h4>
-          <p>Admin mengunggah file Excel penjualan bioskop. Sistem otomatis menyesuaikan tanggal transaksi dengan Waktu Indonesia Barat (WIB).</p>
-        </div>
-        <div class="wf-arrow">→</div>
-        <div class="wf-step">
-          <div class="wf-badge">LANGKAH 2</div>
-          <h4>Penyelarasan Master Data</h4>
-          <p>Sistem mencocokkan data bioskop baru ke kota, regional, dan merek layar bioskop (XXI biasa, Premiere, atau IMAX).</p>
-        </div>
-        <div class="wf-arrow">→</div>
-        <div class="wf-step">
-          <div class="wf-badge">LANGKAH 3</div>
-          <h4>Kalkulasi KPI Otomatis</h4>
-          <p>Sistem menghitung rasio belanja penonton (SPH), selisih target, dan pertumbuhan penjualan dibandingkan bulan lalu.</p>
-        </div>
-        <div class="wf-arrow">→</div>
-        <div class="wf-step">
-          <div class="wf-badge">LANGKAH 4</div>
-          <h4>Penyajian Dashboard Sesuai Jabatan</h4>
-          <p>Direksi melihat seluruh Indonesia, Regional Manager hanya melihat wilayahnya, dan Cinema Manager hanya melihat bioskopnya.</p>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Rumus Finansial Bisnis: SPH (Spend Per Head)</div>
-          <p class="card-desc">
-            Sistem menggunakan prinsip keuangan ketat: <b>Jumlahkan semua omzet dulu, baru bagi dengan total penonton</b>. Hal ini mencegah kesalahan hitung jika ada bioskop yang penontonnya sedikit tetapi belanjanya besar.
-          </p>
-        </div>
-        <div class="card">
-          <div class="card-title">Perhitungan Pertumbuhan (Growth) yang Adil</div>
-          <p class="card-desc">
-            Jika manajemen melihat performa tanggal 1 - 15 Oktober (15 hari), sistem otomatis membandingkannya dengan 15 hari persis sebelumnya (16 - 30 September).
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 5: WORKFLOW MIGRASI DARI LAPTOP KE HOSTING PUBLIK -->
-    <div class="slide" id="slide-5">
-      <div class="badge-tag accent">MIGRATION ROADMAP</div>
-      <h2 class="slide-headline">Workflow Migrasi: Dari Laptop Sampai Hosting Publik</h2>
-      <p class="slide-subtitle">Panduan langkah demi langkah yang jelas dan terstruktur untuk memindahkan aplikasi ke server manajemen.</p>
-
-      <div class="wf-container">
-        <div class="wf-step">
-          <div class="wf-badge">TAHAP 1</div>
-          <h4>Kemas Kode & Database</h4>
-          <p>Kode di laptop sudah bersih dan lengkap. Database SQLite <code>app.db</code> disalin utuh berisi seluruh riwayat penjualan.</p>
-          <div class="code-pill">Hasil: 1 Folder Rapi & Mandiri</div>
-        </div>
-        <div class="wf-arrow">→</div>
-        <div class="wf-step">
-          <div class="wf-badge">TAHAP 2</div>
-          <h4>Kirim ke Server IT Internal</h4>
-          <p>Folder disalin ke komputer server internal IT (Linux / Windows Server) yang sudah dipasang Node.js 22.</p>
-          <div class="code-pill">Lokasi: Server Kantor XXI</div>
-        </div>
-        <div class="wf-arrow">→</div>
-        <div class="wf-step">
-          <div class="wf-badge">TAHAP 3</div>
-          <h4>Nyalakan Sebagai Service 24/7</h4>
-          <p>Dijalankan menggunakan <b>Docker</b> atau <b>PM2</b> agar aplikasi selalu menyala otomatis meskipun server mati lampu/restart.</p>
-          <div class="code-pill">Status: Aktif di Background</div>
-        </div>
-        <div class="wf-arrow">→</div>
-        <div class="wf-step">
-          <div class="wf-badge">TAHAP 4</div>
-          <h4>Sambungkan ke Domain Publik</h4>
-          <p>Tim IT memasang Nginx dan mengarahkan domain perusahaan (misal: <code>kpi.cinema21.co.id</code>) lengkap dengan gembok SSL (HTTPS).</p>
-          <div class="code-pill">Status: Live & Siap Diakses</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Kemudahan Bagi Tim IT Dev (Tinggal Hosting Saja)</div>
-        <p class="card-desc">
-          Semua file pendukung server seperti <b>Dockerfile</b>, <b>docker-compose.yml</b>, dan <b>nginx-production.conf</b> sudah dibuatkan di dalam folder proyek. Tim IT tidak perlu pusing menyusun konfigurasi dari nol—cukup jalankan satu perintah <code>docker compose up -d</code> dan website langsung aktif.
-        </p>
-      </div>
-    </div>
-
-    <!-- SLIDE 6: PENJELASAN TEKNIS DENGAN BAHASA RAMAH -->
-    <div class="slide" id="slide-6">
-      <div class="badge-tag">SECURITY & RELIABILITY</div>
-      <h2 class="slide-headline">Keamanan Data & Temuan Kunci Rahasia</h2>
-      <p class="slide-subtitle">Menjelaskan kondisi keamanan sistem dengan transparan agar Head IT merasa tenang dan yakin.</p>
-
-      <div class="grid-2">
-        <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
-          <div class="card-icon" style="color: #34d399;">🛡️</div>
-          <div class="card-title">Apa yang Sudah Sangat Aman?</div>
-          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-left: 18px;">
-            <li><b>Password Pengguna Terkunci Rapat:</b> Kata sandi diacak dengan rumus enkripsi tinggi (PBKDF2) dan kunci rahasia (*pepper*) yang tidak disimpan di database.</li>
-            <li><b>Pintu Masuk Terjaga (Whitelist):</b> Pengguna dari browser hanya diizinkan memanggil fungsi laporan yang sudah disetujui, tidak bisa sembarangan mengutak-atik sistem.</li>
-            <li><b>Kebal Gangguan Internet Luar:</b> Seluruh font, ikon, dan peta disimpan di dalam server internal sendiri (tidak takut diblokir jaringan).</li>
-          </ul>
-        </div>
-
-        <div class="card" style="border-color: rgba(239, 68, 68, 0.4);">
-          <div class="card-icon" style="color: #ef4444;">🔍</div>
-          <div class="card-title">Temuan Audit: 1 Kunci yang Harus Dirapikan</div>
-          <p class="card-desc">
-            Dalam pemeriksaan kode, ditemukan <b>kunci AI (Anthropic API Key)</b> bekas uji coba lama yang masih tertulis di dalam file <code>Code.gs</code> baris 610.
-          </p>
-          <div class="analogy-box" style="border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">
-            <span>⚠️</span>
-            <div>
-              <b>Solusi Cepat Sebelum Serah-Terima:</b><br>
-              Kunci lama tersebut cukup dihapus dari kode. Kunci baru yang resmi dari kantor cukup dimasukkan ke file rahasia <code>.env</code> di server. Sangat mudah dan aman!
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 7: ROADMAP PENGEMBANGAN SERVER PROFESIONAL -->
-    <div class="slide" id="slide-7">
-      <div class="badge-tag purple">FUTURE ROADMAP</div>
-      <h2 class="slide-headline">Roadmap Masa Depan Pasca-Apps Script</h2>
-      <p class="slide-subtitle">Rencana pengembangan berikutnya setelah aplikasi sukses bertengger di server internal profesional.</p>
-
-      <div class="grid-3">
-        <div class="card">
-          <div class="card-icon" style="color: #38bdf8;">🔄</div>
-          <div class="card-title">Fase 1: Otomasi Penarikan Data (ETL)</div>
-          <p class="card-desc">
-            Menghubungkan aplikasi langsung ke basis data kasir/POS Cinema XXI pusat setiap malam. Admin tidak perlu lagi mengunggah file Excel secara manual.
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="card-icon" style="color: #34d399;">📱</div>
-          <div class="card-title">Fase 2: Notifikasi Bot WhatsApp / Email</div>
-          <p class="card-desc">
-            Kirim ringkasan otomatis setiap jam 08:00 pagi ke grup WhatsApp Direksi: bioskop mana yang mencapai target tertinggi dan outlet mana yang perlu perhatian.
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="card-icon" style="color: #c084fc;">📊</div>
-          <div class="card-title">Fase 3: Multi-LOB Deep Analytics</div>
-          <p class="card-desc">
-            Ekspansi analitik mendalam per jenis menu makanan (Popcorn, Minuman, Combo) dan perbandingan penonton per studio film.
-          </p>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top: 20px; text-align: center; border-color: rgba(59, 130, 246, 0.4);">
-        <h3 style="color: #fff; font-size: 1.25rem;">SIAP UNTUK IMPLEMENTASI DAN SERAH-TERIMA</h3>
-        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 4px;">
-          Seluruh persiapan teknis, dokumen panduan, dan file instalasi siap diserahkan kepada Head IT dan tim DevOps.
-        </p>
-      </div>
-    </div>
-
   </div>
+  <div class="note" style="margin-top:18px"><span>💡</span><div><b>Analogi:</b> Apps Script ibarat <i>warung tenda di lahan orang</i> — cepat dibuka, tapi diatur pemilik lahan. Server profesional ibarat <i>ruko milik sendiri</i> — buka 24 jam, kokoh, dan kita yang pegang kuncinya.</div></div>
+</div>
 
-  <!-- BOTTOM BAR CONTROLS -->
-  <div class="bottom-bar">
-    <button class="nav-btn" id="prev-btn" onclick="prevSlide()">← Prev</button>
-    
-    <div class="progress-track">
-      <div class="progress-fill" id="progress-fill"></div>
-    </div>
-
-    <div class="key-hint">
-      <span>Navigasi: <span class="kbd">←</span> <span class="kbd">→</span> atau <span class="kbd">Space</span></span>
-      <span>|</span>
-      <span>Layar Penuh: <span class="kbd">F</span></span>
-    </div>
-
-    <div class="slide-counter" id="slide-counter">1 / 7</div>
-    
-    <button class="nav-btn" id="next-btn" onclick="nextSlide()">Next →</button>
+<!-- ═════════════ 3. PRD ═════════════ -->
+<div class="slide" id="s3">
+  <div class="tag g">PRODUCT REQUIREMENTS DOCUMENT</div>
+  <h2 class="hl">PRD: Apa, Untuk Siapa, dan Seberapa Berhasil</h2>
+  <p class="sub">Ringkasan kebutuhan produk sebagai pegangan pengembangan selanjutnya.</p>
+  <div class="g3c">
+    <div class="card"><div class="ct">1. Masalah</div><div class="cd">Manajemen sulit memantau capaian penjualan F&amp;B ratusan outlet secara cepat karena laporan tersebar di banyak file Excel dan harus direkap manual.</div></div>
+    <div class="card"><div class="ct">2. Pengguna</div>
+      <ul class="l">
+        <li><b>ADMIN / Head Office</b> — melihat nasional + mengelola data &amp; user.</li>
+        <li><b>RM (Regional Manager)</b> — memantau region &amp; area di bawahnya.</li>
+        <li><b>AREA</b> — memantau outlet di areanya.</li>
+      </ul></div>
+    <div class="card"><div class="ct">3. Ukuran Keberhasilan</div>
+      <ul class="l">
+        <li>Angka KPI <b>100% sama</b> dengan rumus resmi.</li>
+        <li>Dashboard terbuka <b>dalam hitungan detik</b>.</li>
+        <li>Data aman: <b>backup harian</b> &amp; jejak audit.</li>
+      </ul></div>
   </div>
+  <div class="card" style="margin-top:16px">
+    <div class="ct">4. Kamus KPI (bahasa sederhana)</div>
+    <div class="g4c" style="grid-template-columns:repeat(5,1fr)">
+      <div><b style="color:var(--blue-l)">SPH</b><div class="cd">Rata-rata belanja F&amp;B per penonton.<br><code>Omzet F&amp;B ÷ Penonton</code></div></div>
+      <div><b style="color:var(--green)">DS%</b><div class="cd">Berapa persen penonton yang belanja.<br><code>Bill ÷ Penonton</code></div></div>
+      <div><b style="color:var(--violet)">AT</b><div class="cd">Rata-rata nilai satu struk belanja.<br><code>Omzet F&amp;B ÷ Bill</code></div></div>
+      <div><b style="color:var(--amber)">Achv%</b><div class="cd">Pencapaian terhadap target SPH.<br><code>SPH ÷ Target</code></div></div>
+      <div><b style="color:var(--cyan)">+/− Rp</b><div class="cd">Selisih rupiah dari target.<br><code>(SPH − Target) × Penonton</code></div></div>
+    </div>
+  </div>
+</div>
 
-  <script>
-    let currentSlide = 1;
-    const totalSlides = 7;
+<!-- ═════════════ 4. BUSINESS FLOW ═════════════ -->
+<div class="slide" id="s4">
+  <div class="tag">ALUR KERJA HARIAN</div>
+  <h2 class="hl">Proses Bisnis: Dari File Excel ke Keputusan</h2>
+  <p class="sub">Bagaimana data penjualan bergerak di dalam aplikasi setiap harinya.</p>
+  <div class="wf">
+    <div class="wfs"><div class="wfb">LANGKAH 1</div><h4>Admin Upload Data</h4><p>File penjualan (CSV / Excel) diunggah lewat menu <b>Upload Data</b>. Kolom dicocokkan otomatis.</p></div>
+    <div class="arr">→</div>
+    <div class="wfs"><div class="wfb">LANGKAH 2</div><h4>Dicocokkan ke Master</h4><p>Kode outlet dihubungkan ke RM, Area, LOB, Class, dan Kota dari <b>Master Data</b>. Yang tak cocok dicatat.</p></div>
+    <div class="arr">→</div>
+    <div class="wfs"><div class="wfb">LANGKAH 3</div><h4>KPI Dihitung</h4><p>SPH, DS%, AT, Achv%, dan growth dihitung otomatis dengan aturan <b>jumlahkan dulu, baru bagi</b>.</p></div>
+    <div class="arr">→</div>
+    <div class="wfs"><div class="wfb">LANGKAH 4</div><h4>Tampil Sesuai Jabatan</h4><p>ADMIN melihat nasional, RM melihat regionnya, AREA melihat areanya — otomatis dari akun login.</p></div>
+  </div>
+  <div class="g2c">
+    <div class="card"><div class="ct">Kenapa "jumlahkan dulu, baru bagi"?</div><div class="cd">SPH sebuah region = total omzet ÷ total penonton region itu, <b>bukan</b> rata-rata SPH tiap outlet. Dengan begitu outlet kecil tidak membuat angka region melenceng.</div></div>
+    <div class="card"><div class="ct">Growth yang adil (apple-to-apple)</div><div class="cd">Melihat 1–15 Oktober (15 hari)? Sistem otomatis membandingkannya dengan 15 hari tepat sebelumnya, yaitu 16–30 September.</div></div>
+  </div>
+</div>
 
-    function showSlide(n) {
-      if (n < 1) n = 1;
-      if (n > totalSlides) n = totalSlides;
-      currentSlide = n;
+<!-- ═════════════ 5. SIDEBAR MAP ═════════════ -->
+<div class="slide" id="s5">
+  <div class="tag g">TUR APLIKASI · 1/4</div>
+  <h2 class="hl">Peta Menu Sidebar &amp; Siapa yang Bisa Melihatnya</h2>
+  <p class="sub">Menu yang muncul menyesuaikan jabatan pengguna secara otomatis. Server juga menolak akses walau seseorang mencoba "mengakali" tampilan.</p>
+  <div style="display:grid;grid-template-columns:340px 1fr;gap:20px">
+    <div class="sbm">
+      <div class="sec">Menu Utama</div>
+      <div class="it"><span class="nm">▦ Dashboard Overview</span><span class="chip c-all">SEMUA</span></div>
+      <div class="it"><span class="nm">▥ Comparison Detail</span><span class="chip c-all">SEMUA</span></div>
+      <div class="it"><span class="nm">🗺 Mapping Nasional</span><span class="chip c-adm">ADMIN</span></div>
+      <div class="sec">Nasional</div>
+      <div class="it"><span class="nm">🌐 Nasional Perf.</span><span class="chip c-adm">ADMIN</span></div>
+      <div class="sub-it">Daily · Weekly · Monthly · Quartal</div>
+      <div class="sec">Region</div>
+      <div class="it"><span class="nm">🏢 RM Perf.</span><span><span class="chip c-adm">ADMIN</span><span class="chip c-rm">RM</span></span></div>
+      <div class="sub-it">Daily · Weekly · Monthly · Quartal</div>
+      <div class="sec">Area</div>
+      <div class="it"><span class="nm">📍 Area Perf.</span><span class="chip c-area">+AREA</span></div>
+      <div class="sub-it">Daily · Weekly · Monthly · Quartal</div>
+      <div class="it"><span class="nm">🏪 Outlet Perf.</span><span class="chip c-all">SEMUA</span></div>
+      <div class="sub-it">Daily · Weekly · Monthly · Quartal · Outlet Summary</div>
+      <div class="sec">Laporan</div>
+      <div class="it"><span class="nm">▤ Report Detail</span><span class="chip c-all">SEMUA</span></div>
+      <div class="sec">Administrasi</div>
+      <div class="it"><span class="nm">⚙ Master Data</span><span class="chip c-adm">ADMIN</span></div>
+      <div class="it"><span class="nm">☁ Upload Data</span><span class="chip c-adm">ADMIN</span></div>
+      <div class="it"><span class="nm">🗑 Delete Data</span><span class="chip c-adm">ADMIN</span></div>
+      <div class="it"><span class="nm">👥 Master User</span><span class="chip c-adm">ADMIN</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <table class="t">
+        <thead><tr><th>Menu</th><th>ADMIN</th><th>RM</th><th>AREA</th></tr></thead>
+        <tbody>
+          <tr><td>Dashboard Overview, Comparison Detail, Outlet Perf.</td><td>✅</td><td>✅ <span class="cd">(data region-nya)</span></td><td>✅ <span class="cd">(data area-nya)</span></td></tr>
+          <tr><td>Mapping Nasional, Nasional Perf.</td><td>✅</td><td>—</td><td>—</td></tr>
+          <tr><td>RM Perf.</td><td>✅</td><td>✅</td><td>—</td></tr>
+          <tr><td>Area Perf.</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Report Detail — lihat &amp; export</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Report Detail — edit &amp; hapus baris</td><td>✅</td><td>—</td><td>—</td></tr>
+          <tr><td>Master Data, Upload, Delete Data, Master User, Log Akses</td><td>✅</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><span>🔐</span><div><b>Dua lapis penjagaan:</b> menu disembunyikan di layar, <i>dan</i> setiap permintaan ke server diperiksa ulang jabatannya. Jadi pengguna non-ADMIN tetap tidak bisa menghapus data walau mengetahui alamat fungsinya.</div></div>
+      <div class="note" style="border-color:rgba(251,191,36,.4);color:#fde68a"><span>🧩</span><div><b>Daily / Weekly / Monthly / Quartal</b> = tabel laporan yang sama, hanya beda cara mengelompokkan waktunya (per hari, minggu, bulan, atau kuartal).</div></div>
+    </div>
+  </div>
+</div>
 
-      for (let i = 1; i <= totalSlides; i++) {
-        const slide = document.getElementById('slide-' + i);
-        if (slide) {
-          if (i === currentSlide) {
-            slide.classList.add('active');
-          } else {
-            slide.classList.remove('active');
-          }
-        }
-      }
+<!-- ═════════════ 6. DASHBOARD + TOP BAR ═════════════ -->
+<div class="slide" id="s6">
+  <div class="tag g">TUR APLIKASI · 2/4</div>
+  <h2 class="hl">Dashboard Overview &amp; Alat Bantu di Setiap Halaman</h2>
+  <p class="sub">Halaman pertama setelah login: ringkasan kinerja dalam satu layar, plus filter dan tombol yang selalu tersedia.</p>
+  <div class="g3c">
+    <div class="card"><div class="ic">📊</div><div class="ct">Isi Dashboard Overview</div>
+      <ul class="l">
+        <li><b>6 kartu KPI</b>: SPH, Rata-rata Target, DS%, AT, % Achv, dan +/− Rp.</li>
+        <li><b>Kartu Capai vs Belum Capai Target</b>: jumlah outlet ≥100% dan &lt;100%, lengkap dengan tombol <i>Lihat Detail</i>.</li>
+        <li><b>5 grafik tren</b>: SPH, DS%, AT, Admisi (penonton), dan SPH per Class.</li>
+        <li><b>Grafik kombinasi</b> performa dari waktu ke waktu.</li>
+        <li><b>Tabel Performance RM, Area, Outlet</b> — bisa diurutkan per kolom dan dibuka detailnya.</li>
+      </ul></div>
+    <div class="card"><div class="ic">🔎</div><div class="ct">Panel Filter (berlaku global)</div>
+      <ul class="l">
+        <li><b>Periode</b> tanggal awal – akhir.</li>
+        <li><b>Regional (RM), Area, LOB, Class, Outlet</b> — bisa pilih lebih dari satu.</li>
+        <li><b>Tombol cepat</b>: Hari Ini, Kemarin, 1 Minggu, Bulan Ini, Bulan Kemarin, Kuartal Ini, Tahun Ini, Tahun Lalu.</li>
+        <li><b>Reset / Clear Filter</b> dan panel bisa dilipat agar layar lega.</li>
+      </ul></div>
+    <div class="card"><div class="ic">🧰</div><div class="ct">Tombol di Bar Atas</div>
+      <ul class="l">
+        <li><b>Tanya AI</b> — chat untuk bertanya soal data yang sedang tampil.</li>
+        <li><b>Ringkasan Insight AI</b> — poin-poin otomatis + tombol <i>Perdalam dengan AI Analyst</i>.</li>
+        <li><b>Excel / PDF</b> — unduh tampilan saat ini.</li>
+        <li><b>Refresh Data</b> — ambil data terbaru dari server.</li>
+        <li><b>Mode Gelap</b>, <b>Ganti Sandi</b>, <b>Logout</b>.</li>
+        <li><b>Log Akses</b> (ADMIN) — siapa login kapan.</li>
+      </ul></div>
+  </div>
+  <div class="note" style="margin-top:16px"><span>📱</span><div>Tampilan <b>responsif</b>: di HP sidebar berubah menjadi menu geser, dan di laptop sidebar bisa diciutkan menjadi ikon saja.</div></div>
+</div>
 
-      document.getElementById('slide-counter').innerText = `${currentSlide} / ${totalSlides}`;
-      document.getElementById('progress-fill').style.width = `${(currentSlide / totalSlides) * 100}%`;
+<!-- ═════════════ 7. ANALYTIC PAGES ═════════════ -->
+<div class="slide" id="s7">
+  <div class="tag g">TUR APLIKASI · 3/4</div>
+  <h2 class="hl">Halaman Analitik: Bandingkan, Petakan, Telusuri</h2>
+  <p class="sub">Halaman untuk menggali "kenapa" di balik angka.</p>
+  <div class="g2c">
+    <div class="card"><div class="ic">📈</div><div class="ct">Comparison Detail</div>
+      <div class="cd">Membandingkan kinerja <b>tahun ini vs tahun pembanding</b>, dikelompokkan per bulan, kuartal, atau semester.</div>
+      <ul class="l">
+        <li>Metrik: <b>SPH, GBO</b> (porsi F&amp;B terhadap omzet bioskop), <b>DS%, AT, Penonton, Bill, HTM</b>.</li>
+        <li>Bagian: Pergerakan per periode, Pivot periode, Performa per RM/Area/Outlet, <b>Ranking Outlet</b>, Ringkasan &amp; catatan metode.</li>
+        <li>Export <b>CSV</b> dan <b>PDF</b>.</li>
+      </ul></div>
+    <div class="card"><div class="ic">🗺️</div><div class="ct">Mapping Nasional</div>
+      <div class="cd">Peta Indonesia (38 provinsi, 514 kota/kabupaten) yang menampilkan kinerja per <b>wilayah/kota</b>.</div>
+      <ul class="l">
+        <li>Pilih tampilan <b>Jumlah Penonton</b> atau <b>SPH</b>, lengkap dengan growth vs periode sebelumnya.</li>
+        <li><b>Peringkat Wilayah</b>, <b>Distribusi per Wilayah</b>, rincian <b>LOB × Outlet</b>, dan kolom cari wilayah.</li>
+        <li>Peta Gelap / Terang; berjalan <b>tanpa internet</b>. Kota yang namanya tak cocok tetap dihitung dan diberi peringatan.</li>
+      </ul></div>
+    <div class="card"><div class="ic">🏢</div><div class="ct">Nasional / RM / Area / Outlet Perf.</div>
+      <div class="cd">Tabel laporan per <b>Periode × Entitas</b> berisi SPH, Target, DS%, AT, Admisi, +/− Rp, dan Achv — pilih Daily, Weekly, Monthly, atau Quartal.</div></div>
+    <div class="card"><div class="ic">🏪</div><div class="ct">Outlet Summary Performance</div>
+      <div class="cd">Ringkasan tiap outlet yang bisa <b>dibuka per bulan</b>. Menampilkan <b>Sum Achv</b> (jumlah bulan capai target) dan <b>Sum Not Achv</b>. Bulan tanpa target ditandai "—", tidak dihitung gagal. Ada Expand All dan export Excel.</div></div>
+  </div>
+</div>
 
-      document.getElementById('prev-btn').style.opacity = currentSlide === 1 ? '0.4' : '1';
-      document.getElementById('prev-btn').style.pointerEvents = currentSlide === 1 ? 'none' : 'auto';
+<!-- ═════════════ 8. ADMIN PAGES ═════════════ -->
+<div class="slide" id="s8">
+  <div class="tag a">TUR APLIKASI · 4/4</div>
+  <h2 class="hl">Halaman Laporan &amp; Administrasi</h2>
+  <p class="sub">Tempat data dikelola. Semua tindakan berisiko diberi pengaman berlapis.</p>
+  <div class="g3c">
+    <div class="card"><div class="ic">▤</div><div class="ct">Report Detail <span class="chip c-all">SEMUA</span></div>
+      <ul class="l">
+        <li>Tabel transaksi baris per baris dengan pencarian kode / outlet / area / RM.</li>
+        <li><b>Export Excel</b> untuk semua role.</li>
+        <li>ADMIN: <b>Edit baris</b> &amp; <b>Hapus Terpilih</b>. Baris yang dihapus disalin dulu ke log, jadi tetap bisa ditelusuri.</li>
+      </ul></div>
+    <div class="card"><div class="ic">⚙️</div><div class="ct">Master Data <span class="chip c-adm">ADMIN</span></div>
+      <ul class="l">
+        <li>Daftar outlet: kode, nama, Area, RM, AM, Kota, LOB, Class, target.</li>
+        <li><b>Tambah, ubah, nonaktifkan, dan pulihkan</b> outlet.</li>
+        <li>Menjadi acuan pencocokan setiap kali data diunggah.</li>
+      </ul></div>
+    <div class="card"><div class="ic">☁️</div><div class="ct">Upload Data <span class="chip c-adm">ADMIN</span></div>
+      <ul class="l">
+        <li><b>Tarik &amp; lepas</b> file CSV, XLS, XLSX, XLSM.</li>
+        <li>Atur baris judul &amp; pilih kolom yang diimpor.</li>
+        <li>Jika data sudah ada: <b>Timpa</b>, <b>Lewati</b>, atau <b>Tambah baru</b>.</li>
+        <li>Outlet yang tidak dikenal masuk <b>log unmatched</b> untuk dibereskan.</li>
+      </ul></div>
+    <div class="card"><div class="ic">🗑️</div><div class="ct">Delete Data <span class="chip c-adm">ADMIN</span></div>
+      <ul class="l">
+        <li>Hapus per <b>rentang tanggal</b> atau per <b>bulan</b>.</li>
+        <li>Alur 3 langkah: <b>Pratinjau → Konfirmasi token → Eksekusi</b>, sehingga tidak ada salah hapus karena salah klik.</li>
+      </ul></div>
+    <div class="card"><div class="ic">👥</div><div class="ct">Master User <span class="chip c-adm">ADMIN</span></div>
+      <ul class="l">
+        <li>Tambah / ubah user: username, nama, sandi, role (ADMIN, RM, AREA), status.</li>
+        <li><b>Aktif / Nonaktif</b> tanpa menghapus akun, dan <b>Reset Sandi</b>.</li>
+        <li>Username RM/AREA = nama region/area yang boleh dilihat (mis. "JAKARTA 1").</li>
+      </ul></div>
+    <div class="card"><div class="ic">🔑</div><div class="ct">Akun &amp; Log <span class="chip c-all">SEMUA</span></div>
+      <ul class="l">
+        <li><b>Ganti Sandi</b> sendiri (sandi lama + sandi baru 2×).</li>
+        <li>Sesi login bertahan 7 hari, lalu harus login ulang.</li>
+        <li>ADMIN dapat membuka <b>Log Akses</b>: siapa, kapan, dari mana.</li>
+      </ul></div>
+  </div>
+</div>
 
-      document.getElementById('next-btn').style.opacity = currentSlide === totalSlides ? '0.4' : '1';
-      document.getElementById('next-btn').style.pointerEvents = currentSlide === totalSlides ? 'none' : 'auto';
-    }
+<!-- ═════════════ 9. FILE CATALOG ═════════════ -->
+<div class="slide" id="s9">
+  <div class="tag g">KATALOG FILE PROYEK</div>
+  <h2 class="hl">Kegunaan Setiap File di Dalam Folder</h2>
+  <p class="sub">Klik tab untuk memilih kelompok. Tiap kartu menjelaskan peran file dengan bahasa sederhana.</p>
+  <div class="tabs">
+    <button class="tab on" onclick="ff('all',this)">Semua File</button>
+    <button class="tab" onclick="ff('root',this)">Folder Utama &amp; Deployment</button>
+    <button class="tab" onclick="ff('be',this)">Logika Bisnis (.gs)</button>
+    <button class="tab" onclick="ff('fe',this)">Tampilan Layar (.html)</button>
+    <button class="tab" onclick="ff('srv',this)">Mesin Server</button>
+    <button class="tab" onclick="ff('tool',this)">Alat Perawatan &amp; Uji</button>
+  </div>
+  <div class="scroll"><div class="fgrid" id="fgrid">
+    <!-- ROOT -->
+    <div class="fi" data-c="root"><span class="fl">Folder utama</span><span class="fn">package.json</span><span class="fp">"Buku menu" perintah: start, stop, import, backup, restore, test. Mensyaratkan Node.js 22.13+. Tanpa paket tambahan.</span></div>
+    <div class="fi" data-c="root"><span class="fl">Folder utama</span><span class="fn">.env / .env.example</span><span class="fp">Pengaturan rahasia &amp; server: port, host, domain yang diizinkan, AUTH_PEPPER, kunci AI. <b>.env tidak boleh ikut ke Git.</b></span></div>
+    <div class="fi" data-c="root"><span class="fl">Folder utama</span><span class="fn">.gitignore</span><span class="fp">Daftar file yang dilarang masuk Git: .env, database, backup.</span></div>
+    <div class="fi" data-c="root"><span class="fl">Folder utama</span><span class="fn">README.md</span><span class="fp">Petunjuk singkat menjalankan aplikasi dan daftar perintah.</span></div>
+    <div class="fi" data-c="root"><span class="fl">Deployment</span><span class="fn">Dockerfile</span><span class="fp">Resep membungkus aplikasi menjadi container (Node 22, zona WIB, health check).</span></div>
+    <div class="fi" data-c="root"><span class="fl">Deployment</span><span class="fn">docker-compose.yml</span><span class="fp">Menyalakan container dengan satu perintah; folder data disimpan di luar container agar tidak hilang.</span></div>
+    <div class="fi" data-c="root"><span class="fl">Deployment</span><span class="fn">nginx-production.conf</span><span class="fp">Template "pintu depan" web: HTTPS, header keamanan, batas upload 64 MB, diteruskan ke port 3000.</span></div>
+    <div class="fi" data-c="root"><span class="fl">Dokumen</span><span class="fn">PANDUAN-MIGRASI.md</span><span class="fp">Panduan langkah demi langkah memindahkan data Google Sheets ke server, untuk non-programmer.</span></div>
+    <div class="fi" data-c="root"><span class="fl">Data</span><span class="fn">server/data/app.db</span><span class="fp"><b>Seluruh data aplikasi</b> dalam satu file: transaksi, master, user, log. File terpenting untuk di-backup.</span></div>
 
-    function nextSlide() {
-      if (currentSlide < totalSlides) showSlide(currentSlide + 1);
-    }
+    <!-- BACKEND -->
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">Code.gs</span><span class="fp">Otak utama: membuka halaman, login, mengumpulkan &amp; meng-cache data dashboard, dan menghubungkan fitur Tanya AI.</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">Core.gs</span><span class="fp">Fondasi bersama: membersihkan input, cache, antrian kunci agar tidak tabrakan, dan penjaga role.</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">SessionAuth.gs</span><span class="fp">Mengelola "tiket masuk" (token) login yang berlaku 7 hari.</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">AuthHash.gs</span><span class="fp">Mengacak sandi (PBKDF2 + salt + pepper) sehingga sandi asli tidak pernah tersimpan.</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">Account.gs</span><span class="fp">Ganti sandi sendiri, reset sandi oleh ADMIN, dan pembatasan percobaan login gagal.</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">AuditLog.gs</span><span class="fp">Mencatat siapa login/logout, kapan, dan dari mana (Log Akses).</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">MasterData.gs</span><span class="fp">Tambah/ubah/nonaktifkan/pulihkan outlet beserta kamus pencocokan nama.</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">DataImport.gs</span><span class="fp">Mesin impor file: menerima per potongan, mencocokkan outlet, menangani data ganda, mencatat yang tak cocok.</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">DataReport.gs</span><span class="fp">Mesin Report Detail: cari data, edit satu baris, hapus massal, export.</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">AdminUsers.gs</span><span class="fp">Master User: tambah, ubah, aktif/nonaktif, reset sandi (khusus ADMIN).</span></div>
+    <div class="fi" data-c="be"><span class="fl">Logika bisnis</span><span class="fn">AdminDelete.gs</span><span class="fp">Delete Data per tanggal/bulan dengan pratinjau dan token konfirmasi.</span></div>
 
-    function prevSlide() {
-      if (currentSlide > 1) showSlide(currentSlide - 1);
-    }
+    <!-- FRONTEND -->
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">Index.html</span><span class="fp">Kerangka utama: halaman login, sidebar, bar atas, filter, Dashboard Overview, tabel Performance, Outlet Summary, chat AI.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_Shared.html</span><span class="fp">"Buku gaya" bersama: warna, huruf, tombol, kotak dialog, dan fungsi bantu yang dipakai semua halaman.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_Router.html</span><span class="fp">Pengatur perpindahan halaman tanpa reload dan penampil menu Administrasi khusus ADMIN.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_CompDetail + Js</span><span class="fp">Halaman Comparison Detail: tampilan dan logika perbandingan antar tahun/periode.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_Mapping + Js</span><span class="fp">Halaman Mapping Nasional: peta Indonesia, peringkat &amp; distribusi wilayah.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_Report + Js</span><span class="fp">Halaman Report Detail: tabel transaksi, cari, edit, hapus terpilih, export.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_MasterData + Js</span><span class="fp">Halaman Master Data: daftar dan formulir outlet.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_Upload + Js</span><span class="fp">Halaman Upload Data: tarik-lepas file, baca Excel di browser, pilih kolom, progress unggah.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_Admin + Js</span><span class="fp">Halaman Delete Data dan Master User.</span></div>
+    <div class="fi" data-c="fe"><span class="fl">Tampilan</span><span class="fn">ui_Account.html</span><span class="fp">Jendela Ganti Sandi dan Reset Sandi.</span></div>
 
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
-        nextSlide();
-      } else if (e.key === 'ArrowLeft') {
-        prevSlide();
-      } else if (e.key.toLowerCase() === 'f') {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(() => {});
-        } else {
-          document.exitFullscreen().catch(() => {});
-        }
-      }
+    <!-- SERVER -->
+    <div class="fi" data-c="srv"><span class="fl">Mesin server</span><span class="fn">server/start.js</span><span class="fp">Server web utama. Menyajikan halaman, menerima permintaan dari browser, hanya meneruskan fungsi yang ada di daftar izin, menolak permintaan dari situs/domain asing.</span></div>
+    <div class="fi" data-c="srv"><span class="fl">Mesin server</span><span class="fn">lib/config.js</span><span class="fp">Membaca file .env dan mengunci zona waktu ke WIB sebelum apa pun berjalan.</span></div>
+    <div class="fi" data-c="srv"><span class="fl">Mesin server</span><span class="fn">lib/runtime.js</span><span class="fp">Menjalankan file logika bisnis (.gs) di ruang terisolasi di dalam server.</span></div>
+    <div class="fi" data-c="srv"><span class="fl">Mesin server</span><span class="fn">lib/shim-spreadsheet.js</span><span class="fp">"Penerjemah" perintah Google Sheets menjadi perintah database SQLite.</span></div>
+    <div class="fi" data-c="srv"><span class="fl">Mesin server</span><span class="fn">lib/shim-services.js</span><span class="fp">Pengganti layanan Google lain: penyimpanan pengaturan, cache, kunci, enkripsi, pemanggilan AI.</span></div>
+    <div class="fi" data-c="srv"><span class="fl">Mesin server</span><span class="fn">lib/db.js</span><span class="fp">Pengelola database SQLite: membuat tabel, membaca, menulis dengan aman.</span></div>
+    <div class="fi" data-c="srv"><span class="fl">Mesin server</span><span class="fn">lib/xlsx-reader.js + impor.js</span><span class="fp">Pembaca file Excel tanpa pustaka luar, dipakai saat impor awal data.</span></div>
+    <div class="fi" data-c="srv"><span class="fl">Mesin server</span><span class="fn">server/vendor/</span><span class="fp">Salinan lokal Bootstrap, Chart.js, SheetJS, ikon, dan font agar aplikasi tetap tampil sempurna tanpa internet.</span></div>
+
+    <!-- TOOLS -->
+    <div class="fi" data-c="tool"><span class="fl">Perawatan</span><span class="fn">tools/backup.js</span><span class="fp">Membuat salinan database secara aman, bahkan saat server menyala.</span></div>
+    <div class="fi" data-c="tool"><span class="fl">Perawatan</span><span class="fn">tools/restore.js</span><span class="fp">Mengembalikan database dari file backup (server harus dimatikan dulu).</span></div>
+    <div class="fi" data-c="tool"><span class="fl">Perawatan</span><span class="fn">tools/reset-sandi.js</span><span class="fp">Reset sandi atau buat ADMIN baru langsung dari server — jalan darurat bila ADMIN lupa sandi.</span></div>
+    <div class="fi" data-c="tool"><span class="fl">Perawatan</span><span class="fn">tools/import-xlsx.js / import-csv.js</span><span class="fp">Memasukkan data dari file Excel/CSV ke database, lalu memverifikasi setiap sel.</span></div>
+    <div class="fi" data-c="tool"><span class="fl">Perawatan</span><span class="fn">tools/status.js / stop.js</span><span class="fp">Melihat isi database (jumlah baris per tabel) dan mematikan server.</span></div>
+    <div class="fi" data-c="tool"><span class="fl">Perawatan</span><span class="fn">tools/fetch-vendor.js</span><span class="fp">Mengunduh pustaka tampilan &amp; font sekali saja agar mode offline aktif.</span></div>
+    <div class="fi" data-c="tool"><span class="fl">Pengujian</span><span class="fn">server/test/*.test.js</span><span class="fp">Uji otomatis (<code>npm test</code>): memastikan angka sama, keamanan bekerja, impor dan reset sandi benar.</span></div>
+    <div class="fi" data-c="tool"><span class="fl">Arsip</span><span class="fn">_rollback/</span><span class="fp">Salinan versi sebelumnya untuk jaga-jaga bila perlu kembali.</span></div>
+  </div></div>
+</div>
+
+<!-- ═════════════ 10. MIGRATION WORKFLOW ═════════════ -->
+<div class="slide" id="s10">
+  <div class="tag g">WORKFLOW MIGRASI</div>
+  <h2 class="hl">Dari Laptop Sampai Online di Domain Kantor</h2>
+  <p class="sub">Lima langkah. Tim IT cukup menyiapkan server dan domain — sisanya sudah disiapkan di dalam folder proyek.</p>
+  <div class="wf">
+    <div class="wfs"><div class="wfb">1 · LAPTOP</div><h4>Rapikan &amp; Kemas</h4><p>Hapus kunci AI lama dari kode, buat backup terakhir (<code>npm run backup</code>), kirim folder lewat Git/ZIP. File <code>.env</code> dikirim terpisah secara aman.</p><div class="pill">Hasil: folder + app.db</div></div>
+    <div class="arr">→</div>
+    <div class="wfs"><div class="wfb">2 · SERVER</div><h4>Siapkan Server</h4><p>Server Linux/Windows di jaringan kantor dengan <b>Docker</b> atau <b>Node.js 22.13+</b>.</p><div class="pill">Disiapkan tim IT</div></div>
+    <div class="arr">→</div>
+    <div class="wfs"><div class="wfb">3 · ATUR</div><h4>Isi Pengaturan</h4><p>Taruh folder &amp; <code>app.db</code>, isi <code>.env</code>: <code>HOST=0.0.0.0</code>, <code>ALLOWED_HOSTS</code>=domain, <code>AUTH_PEPPER</code>, kunci AI baru.</p><div class="pill">± 10 menit</div></div>
+    <div class="arr">→</div>
+    <div class="wfs"><div class="wfb">4 · NYALAKAN</div><h4>Jalan 24 Jam</h4><p><code>docker compose up -d</code> — atau PM2. Otomatis hidup lagi bila server restart.</p><div class="pill">Cek: npm test lulus</div></div>
+    <div class="arr">→</div>
+    <div class="wfs"><div class="wfb">5 · ONLINE</div><h4>Domain + HTTPS</h4><p>Pasang Nginx dari template, sambungkan domain (mis. <code>kpi.perusahaan.co.id</code>) dan sertifikat SSL.</p><div class="pill">Live 🎉</div></div>
+  </div>
+  <div class="g3c">
+    <div class="card"><div class="ct">✅ Sudah tersedia di folder</div><div class="cd">Dockerfile, docker-compose.yml, nginx-production.conf, panduan migrasi, alat backup/restore, dan uji otomatis.</div></div>
+    <div class="card"><div class="ct">🧑‍💻 Yang dikerjakan tim IT</div><div class="cd">Menyediakan server, domain/DNS, sertifikat SSL, firewall, dan jadwal backup harian ke storage kantor.</div></div>
+    <div class="card"><div class="ct">⚠️ Wajib diingat</div><div class="cd"><b>AUTH_PEPPER</b> harus sama dengan yang lama. Jika hilang, semua user tidak bisa login dan sandi harus di-reset.</div></div>
+  </div>
+</div>
+
+<!-- ═════════════ 11. SECURITY ═════════════ -->
+<div class="slide" id="s11">
+  <div class="tag a">KEAMANAN</div>
+  <h2 class="hl">Seberapa Aman Aplikasi Ini?</h2>
+  <p class="sub">Penjelasan jujur: apa yang sudah kuat, dan satu hal yang wajib dibereskan sebelum serah-terima.</p>
+  <div class="g2c">
+    <div class="card" style="border-color:rgba(52,211,153,.4)"><div class="ic">🛡️</div><div class="ct">Yang sudah kuat</div>
+      <ul class="l">
+        <li><b>Sandi diacak</b> (PBKDF2 + salt + pepper) — bahkan admin database tidak bisa membaca sandi asli.</li>
+        <li><b>Daftar izin fungsi</b> — browser hanya boleh memanggil fungsi yang sudah disetujui.</li>
+        <li><b>Penjaga domain</b> — permintaan dari situs atau alamat asing ditolak.</li>
+        <li><b>Cek jabatan di server</b> — fitur ADMIN tetap terkunci walau tampilan diakali.</li>
+        <li><b>Jejak audit</b> — login dan penghapusan data tercatat.</li>
+      </ul></div>
+    <div class="card" style="border-color:rgba(248,113,113,.4)"><div class="ic">🔍</div><div class="ct">Temuan: 1 kunci AI tertulis di kode</div>
+      <div class="cd">File <code>Code.gs</code> baris 609–612 (fungsi <code>setApiKeyOnce</code>) masih berisi kunci Anthropic dari masa uji coba.</div>
+      <div class="note" style="border-color:rgba(248,113,113,.4);color:#fecaca"><span>🧯</span><div><b>Perbaikan (± 15 menit):</b><br>1. Nonaktifkan kunci lama di konsol Anthropic.<br>2. Hapus fungsi tersebut dari kode.<br>3. Isi kunci baru hanya di file <code>.env</code> server — server sudah otomatis membacanya dari sana.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ 12. ROADMAP ═════════════ -->
+<div class="slide" id="s12">
+  <div class="tag v">ROADMAP</div>
+  <h2 class="hl">Rencana Setelah Online di Server</h2>
+  <p class="sub">Karena kini berdiri di server sendiri, pengembangan berikut bisa dilakukan tanpa batasan Apps Script.</p>
+  <div class="g3c">
+    <div class="card"><div class="ic">🧹</div><div class="ct">Fase 0 · Serah-terima</div><div class="cd">Bersihkan kunci AI, pindahkan ke Git kantor, deploy ke server, backup harian, uji bersama user (UAT).</div></div>
+    <div class="card"><div class="ic">🔄</div><div class="ct">Fase 1 · Data otomatis</div><div class="cd">Tarik data langsung dari sistem penjualan setiap malam sehingga admin tidak perlu upload Excel manual.</div></div>
+    <div class="card"><div class="ic">📣</div><div class="ct">Fase 2 · Notifikasi</div><div class="cd">Ringkasan pagi otomatis via email/WhatsApp: outlet terbaik dan outlet yang perlu perhatian.</div></div>
+  </div>
+  <div class="card" style="margin-top:18px;text-align:center;border-color:rgba(59,130,246,.4)">
+    <h3 style="font-size:1.25rem">Siap diserahterimakan &amp; didemokan</h3>
+    <p class="cd" style="margin-top:4px">Kode, data, dokumen, dan file deployment sudah lengkap di satu folder.</p>
+  </div>
+</div>
+
+</div>
+
+<div class="bar">
+  <button class="nb" id="pv" onclick="go(cur-1)">← Prev</button>
+  <div class="trk"><div class="fill" id="fill"></div></div>
+  <div class="hint">Navigasi <span class="kbd">←</span> <span class="kbd">→</span> · Layar penuh <span class="kbd">F</span></div>
+  <div class="cnt" id="cnt">1 / 12</div>
+  <button class="nb" id="nx" onclick="go(cur+1)">Next →</button>
+</div>
+
+<script>
+  const N = 12; let cur = 1;
+  function go(n){
+    n = Math.max(1, Math.min(N, n)); cur = n;
+    for (let i = 1; i <= N; i++) document.getElementById('s'+i).classList.toggle('active', i === cur);
+    document.getElementById('cnt').textContent = cur + ' / ' + N;
+    document.getElementById('fill').style.width = (cur / N * 100) + '%';
+    const pv = document.getElementById('pv'), nx = document.getElementById('nx');
+    pv.style.opacity = cur === 1 ? .4 : 1; pv.style.pointerEvents = cur === 1 ? 'none' : 'auto';
+    nx.style.opacity = cur === N ? .4 : 1; nx.style.pointerEvents = cur === N ? 'none' : 'auto';
+  }
+  function ff(cat, btn){
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    document.querySelectorAll('#fgrid .fi').forEach(el => {
+      el.style.display = (cat === 'all' || el.dataset.c === cat) ? 'flex' : 'none';
     });
-
-    showSlide(1);
-  </script>
+  }
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'BUTTON' && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') go(cur+1);
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(cur-1);
+    else if (e.key.toLowerCase() === 'f') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+      else document.exitFullscreen().catch(()=>{});
+    }
+  });
+  go(1);
+</script>
 </body>
 </html>
