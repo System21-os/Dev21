@@ -3,22 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Executive Tech Pitch: Migrasi, Arsitektur & Deployment KPI Dashboard</title>
+  <title>Executive Briefing: PRD, Visi Server Profesional & Workflow Migrasi KPI Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #07090e;
-      --bg-card: rgba(18, 24, 38, 0.78);
-      --bg-card-hover: rgba(26, 35, 56, 0.9);
+      --bg-dark: #080b11;
+      --bg-card: rgba(18, 24, 38, 0.85);
+      --bg-card-hover: rgba(26, 35, 56, 0.95);
       --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(59, 130, 246, 0.4);
+      --border-glow: rgba(59, 130, 246, 0.5);
       --primary: #3b82f6;
       --primary-light: #60a5fa;
-      --primary-glow: rgba(59, 130, 246, 0.35);
       --accent: #10b981;
-      --accent-glow: rgba(16, 185, 129, 0.3);
       --warning: #f59e0b;
       --danger: #ef4444;
       --purple: #8b5cf6;
@@ -42,7 +40,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Ambient Lighting Gradients */
+    /* Ambient Lighting */
     .ambient-bg {
       position: absolute;
       inset: 0;
@@ -50,46 +48,40 @@
       pointer-events: none;
       z-index: 0;
     }
-    .glow-sphere-1 {
+    .glow-1 {
       position: absolute;
       width: 700px;
       height: 700px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.16) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 65%);
       top: -200px;
-      right: -150px;
-      filter: blur(90px);
-      animation: float 20s infinite alternate ease-in-out;
+      right: -100px;
+      filter: blur(100px);
     }
-    .glow-sphere-2 {
+    .glow-2 {
       position: absolute;
-      width: 600px;
-      height: 600px;
+      width: 650px;
+      height: 650px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, transparent 65%);
       bottom: -150px;
       left: -100px;
       filter: blur(100px);
-      animation: float 25s infinite alternate-reverse ease-in-out;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px) scale(1); }
-      100% { transform: translateY(50px) scale(1.08); }
     }
 
-    /* Grid Overlay Pattern */
-    .grid-overlay {
+    /* Grid Line */
+    .grid-lines {
       position: absolute;
       inset: 0;
       background-image: 
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 40px 40px;
+      background-size: 48px 48px;
       pointer-events: none;
       z-index: 1;
     }
 
-    /* Main Container & Slides */
+    /* Slide Container */
     .slides-wrapper {
       position: relative;
       width: 100%;
@@ -106,8 +98,8 @@
       justify-content: center;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(24px) scale(0.985);
-      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+      transform: translateY(20px) scale(0.985);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       overflow-y: auto;
     }
 
@@ -117,7 +109,7 @@
       transform: translateY(0) scale(1);
     }
 
-    /* Badges & Typography */
+    /* Typography & Hierarchy */
     .badge-tag {
       display: inline-flex;
       align-items: center;
@@ -133,27 +125,27 @@
       letter-spacing: 0.09em;
       margin-bottom: 16px;
       width: fit-content;
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
     }
-
     .badge-tag.accent {
       background: rgba(16, 185, 129, 0.12);
       border-color: rgba(16, 185, 129, 0.35);
       color: #34d399;
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
     }
-
+    .badge-tag.purple {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: rgba(139, 92, 246, 0.35);
+      color: #c084fc;
+    }
     .badge-tag.warning {
       background: rgba(245, 158, 11, 0.12);
       border-color: rgba(245, 158, 11, 0.35);
       color: #fbbf24;
-      box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
     }
 
     .slide-headline {
       font-size: 2.6rem;
       font-weight: 800;
-      line-height: 1.15;
+      line-height: 1.2;
       letter-spacing: -0.025em;
       margin-bottom: 14px;
       background: linear-gradient(135deg, #ffffff 10%, #cbd5e1 90%);
@@ -162,16 +154,15 @@
     }
 
     .slide-subtitle {
-      font-size: 1.1rem;
+      font-size: 1.12rem;
       color: var(--text-muted);
       line-height: 1.6;
-      max-width: 950px;
+      max-width: 980px;
       margin-bottom: 28px;
-      font-weight: 400;
     }
 
     .gradient-text {
-      background: linear-gradient(120deg, #60a5fa 0%, #a78bfa 50%, #38bdf8 100%);
+      background: linear-gradient(120deg, #60a5fa 0%, #a78bfa 50%, #34d399 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -198,19 +189,18 @@
       background: var(--bg-card-hover);
       border-color: var(--border-glow);
       transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
     }
 
     .card-icon {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.35rem;
+      font-size: 1.4rem;
     }
 
     .card-title {
@@ -220,173 +210,96 @@
     }
 
     .card-desc {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       color: var(--text-muted);
       line-height: 1.6;
     }
 
-    .code-snippet {
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      background: rgba(5, 7, 12, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 10px;
-      padding: 12px 16px;
-      color: #38bdf8;
+    .analogy-box {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px dashed rgba(59, 130, 246, 0.4);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.88rem;
+      color: #93c5fd;
       line-height: 1.5;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
     }
 
-    /* Process Flow */
-    .flow-chain {
+    /* Workflow Diagram */
+    .wf-container {
       display: flex;
-      align-items: center;
       gap: 14px;
+      align-items: stretch;
+      margin-top: 10px;
       margin-bottom: 24px;
     }
 
-    .flow-node {
+    .wf-step {
       flex: 1;
-      background: rgba(20, 27, 44, 0.8);
+      background: rgba(20, 27, 44, 0.85);
       border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
       position: relative;
       transition: all 0.25s;
     }
 
-    .flow-node:hover {
+    .wf-step:hover {
       border-color: var(--primary);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
     }
 
-    .flow-num {
+    .wf-badge {
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: var(--primary-light);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      width: fit-content;
+      margin-bottom: 12px;
       font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 6px;
     }
 
-    .flow-node h4 {
+    .wf-step h4 {
       font-size: 1.05rem;
       color: #fff;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-weight: 700;
     }
 
-    .flow-node p {
-      font-size: 0.82rem;
+    .wf-step p {
+      font-size: 0.84rem;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
-    .flow-sep {
+    .wf-arrow {
+      align-self: center;
       color: var(--text-dim);
       font-size: 1.4rem;
       font-weight: bold;
     }
 
-    /* Interactive File Explorer Tab */
-    .file-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .file-tab-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      padding: 8px 18px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .file-tab-btn.active, .file-tab-btn:hover {
-      background: rgba(59, 130, 246, 0.2);
-      border-color: var(--primary);
-      color: #fff;
-    }
-
-    .file-catalog-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      max-height: 400px;
-      overflow-y: auto;
-      padding-right: 8px;
-    }
-
-    .file-catalog-grid::-webkit-scrollbar {
-      width: 6px;
-    }
-    .file-catalog-grid::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-    }
-
-    .file-item {
-      background: rgba(14, 19, 31, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      padding: 14px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .file-item:hover {
-      border-color: rgba(59, 130, 246, 0.4);
-      background: rgba(20, 27, 44, 0.85);
-    }
-
-    .file-name {
+    /* Code Pill */
+    .code-pill {
       font-family: var(--font-mono);
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #60a5fa;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .file-purpose {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
-
-    /* Comparison Table */
-    .compare-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .compare-table th {
-      background: rgba(26, 35, 56, 0.85);
-      padding: 14px 20px;
-      text-align: left;
       font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #94a3b8;
-    }
-    .compare-table td {
-      background: rgba(15, 22, 36, 0.6);
-      padding: 14px 20px;
-      font-size: 0.88rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-      color: #e2e8f0;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #38bdf8;
+      margin-top: auto;
     }
 
-    /* Controls Bar */
+    /* Bottom Navigation */
     .bottom-bar {
       position: absolute;
       bottom: 24px;
@@ -397,7 +310,7 @@
       align-items: center;
       z-index: 10;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
-      padding-top: 18px;
+      padding-top: 16px;
     }
 
     .progress-track {
@@ -412,8 +325,8 @@
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--primary), #a78bfa);
-      width: 10%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 12.5%;
       transition: width 0.3s ease;
     }
 
@@ -435,7 +348,7 @@
     .nav-btn:hover {
       background: var(--primary);
       border-color: var(--primary);
-      box-shadow: 0 0 15px var(--primary-glow);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
     }
 
     .slide-counter {
@@ -464,375 +377,298 @@
 <body>
 
   <div class="ambient-bg">
-    <div class="glow-sphere-1"></div>
-    <div class="glow-sphere-2"></div>
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
   </div>
-  <div class="grid-overlay"></div>
+  <div class="grid-lines"></div>
 
   <div class="slides-wrapper">
 
-    <!-- SLIDE 1: COVER -->
+    <!-- SLIDE 1: COVER STRATEGIS -->
     <div class="slide active" id="slide-1">
-      <div class="badge-tag">FULLSTACK TECHNICAL KEYNOTE · CINEMA XXI</div>
-      <h1 class="slide-headline" style="font-size: 3.4rem;">
-        Modernisasi & Public Hosting Roadmap<br>
-        <span class="gradient-text">KPI Dashboard Analytics</span>
+      <div class="badge-tag">EXECUTIVE STRATEGY BRIEFING · CINEMA XXI</div>
+      <h1 class="slide-headline" style="font-size: 3.3rem;">
+        Transformasi Menuju <span class="gradient-text">Server Profesional</span><br>
+        KPI Dashboard Analytics
       </h1>
-      <p class="slide-subtitle" style="font-size: 1.2rem; max-width: 900px;">
-        Pemaparan arsitektur sistem, katalog berkas kode, audit keamanan, dan panduan serah-terima instalasi siap hosting publik untuk Tim IT Dev.
+      <p class="slide-subtitle" style="font-size: 1.2rem;">
+        Menghadirkan keandalan analitik performa bioskop: Meninggalkan keterbatasan Google Apps Script menuju platform mandiri, cepat, dan siap di-hosting publik untuk manajemen.
       </p>
 
       <div class="grid-3" style="max-width: 1050px; margin-top: 10px;">
         <div class="card">
-          <div class="card-icon" style="color: #60a5fa;">⚡</div>
-          <div class="card-title">100% Native Node.js</div>
-          <div class="card-desc">Tanpa dependensi npm luar (Zero Dependencies). Tidak rentan isu instalasi firewall/proxy kantor.</div>
+          <div class="card-icon" style="color: #60a5fa;">🎯</div>
+          <div class="card-title">Fokus PRD Produk</div>
+          <div class="card-desc">Dirancang spesifik untuk kebutuhan Direksi, Regional Manager, dan Bioskop dalam memantau penjualan harian F&B dan Tiket.</div>
         </div>
         <div class="card">
-          <div class="card-icon" style="color: #34d399;">💎</div>
-          <div class="card-title">Zero Refactor Risk</div>
-          <div class="card-desc">23 berkas Apps Script (.gs & .html) dieksekusi apa adanya dengan hasil perhitungan 100% identik.</div>
+          <div class="card-icon" style="color: #34d399;">🏢</div>
+          <div class="card-title">Bukan Lagi Apps Script</div>
+          <div class="card-desc">Apps Script hanya prototipe awal. Arah masa depan adalah sistem server internal korporat yang stabil tanpa kuota Google.</div>
         </div>
         <div class="card">
           <div class="card-icon" style="color: #a78bfa;">🚀</div>
-          <div class="card-title">Turnkey Public Hosting</div>
-          <div class="card-desc">Siap dipasarkan dengan Dockerfile, Docker Compose, Nginx SSL reverse proxy, dan process daemon.</div>
+          <div class="card-title">Siap Hosting Publik</div>
+          <div class="card-desc">Alur migrasi yang rapi dari laptop ke server internal, sehingga tim IT Dev tinggal mengarahkan domain web publik.</div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 2: BUSINESS PROCESS DETAIL -->
+    <!-- SLIDE 2: MENGAPA TINGGALKAN APPS SCRIPT? -->
     <div class="slide" id="slide-2">
-      <div class="badge-tag">END-TO-END BUSINESS LOGIC</div>
-      <h2 class="slide-headline">Alur Proses Bisnis & Integritas KPI</h2>
-      <p class="slide-subtitle">Bagaimana transaksi bioskop seluruh nusantara diproses dari data mentah menjadi analitik eksekutif presisi.</p>
-
-      <div class="flow-chain">
-        <div class="flow-node">
-          <div class="flow-num">TAHAP 01</div>
-          <h4>Raw Ingestion</h4>
-          <p>Impor bulanan/harian dari ERP POS Cinema XXI via XLSX/CSV. Auto-sanitasi zona waktu Jakarta (WIB GMT+7).</p>
-        </div>
-        <div class="flow-sep">→</div>
-        <div class="flow-node">
-          <div class="flow-num">TAHAP 02</div>
-          <h4>Master Matching</h4>
-          <p>Pencocokan Kode Outlet ke Kota/Kabupaten, Regional, dan Line of Business (XXI, Premiere, IMAX).</p>
-        </div>
-        <div class="flow-sep">→</div>
-        <div class="flow-node">
-          <div class="flow-num">TAHAP 03</div>
-          <h4>Super Cache & Agregasi</h4>
-          <p>Engine perhitungan SPH, GBO, HTM, dan target ketercapaian dengan sistem cache in-memory TTL multi-layer.</p>
-        </div>
-        <div class="flow-sep">→</div>
-        <div class="flow-node">
-          <div class="flow-num">TAHAP 04</div>
-          <h4>RBAC Role Filtration</h4>
-          <p>Gerbang otorisasi: Admin (Nasional), RM (Per-Region), dan Area Manager (Per-Outlet spesifik).</p>
-        </div>
-      </div>
-
-      <div class="grid-3">
-        <div class="card">
-          <div class="card-title">Formula Finansial SPH</div>
-          <div class="card-desc">Prinsip <b>SUM dulu, baru bagi</b>: <br><code>SPH = Total Omzet F&B ÷ Total Penonton</code>. Mencegah distorsi rata-rata tertimbang.</div>
-        </div>
-        <div class="card">
-          <div class="card-title">Growth Periode Seimbang</div>
-          <div class="card-desc">Membandingkan rentang tanggal aktif dengan rentang masa lalu berdurasi hari yang sama persis (apple-to-apple).</div>
-        </div>
-        <div class="card">
-          <div class="card-title">Peta Cerdas Nasional (SVG)</div>
-          <div class="card-desc">Menampilkan kinerja 514 kota/kabupaten dengan proyeksi equirectangular murni tanpa request CDN luar.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 3: SYSTEM ARCHITECTURE -->
-    <div class="slide" id="slide-3">
-      <div class="badge-tag">CORE ARCHITECTURE</div>
-      <h2 class="slide-headline">Arsitektur Hybrid: Node.js VM + SQLite Shimming</h2>
-      <p class="slide-subtitle">Menghubungkan kode Google Apps Script warisan ke server lokal performa tinggi tanpa mengubah baris kode aslinya.</p>
+      <div class="badge-tag purple">STRATEGIC PIVOT</div>
+      <h2 class="slide-headline">Mengapa Kita Harus Pindah ke Server Profesional?</h2>
+      <p class="slide-subtitle">Apps Script adalah solusi uji coba (prototipe). Untuk kebutuhan korporasi skala bioskop nasional, platform server mandiri adalah keharusan mutlak.</p>
 
       <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Lapisan Klien (Frontend UI)</div>
-          <p class="card-desc">Menjalankan <code>Index.html</code>, Bootstrap 5, Chart.js, dan SheetJS lokal. Mengakses server melalui jembatan <code>google.script.run</code>.</p>
-          <div class="code-snippet">
-            // Client Browser Trigger<br>
-            google.script.run<br>
-              .withSuccessHandler(onSuccess)<br>
-              .getDashboardData(filterParams);
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">Lapisan Server (Node.js 22 Runtime)</div>
-          <p class="card-desc">Server menerima HTTP POST <code>/api/getDashboardData</code>, memverifikasi whitelist, lalu mengeksekusi fungsi di dalam <code>node:vm</code>.</p>
-          <div class="code-snippet">
-            // HTTP Bridge ke VM Sandbox<br>
-            POST /api/:fn ──► Check Whitelist ──► node:vm Context<br>
-            SpreadsheetApp ──► shim-spreadsheet.js ──► SQLite (app.db)
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top: 16px;">
-        <div class="card-title">Perbandingan Performa Eksekusi Database</div>
-        <div class="grid-3" style="margin-top: 6px;">
-          <div>
-            <strong style="color: #60a5fa;">Latensi Google Sheets API</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">800ms - 2.800ms per panggilan RPC jarak jauh.</p>
-          </div>
-          <div>
-            <strong style="color: #34d399;">Latensi Engine SQLite Lokal</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">< 3ms untuk 100.000+ baris transaksi transaksi terindeks.</p>
-          </div>
-          <div>
-            <strong style="color: #a78bfa;">Ketahanan Jaringan (Offline Mode)</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">100% beroperasi di jaringan tertutup/intranet tanpa internet.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 4: FILE CATALOG EXPLORER (JAWABAN PER FILE) -->
-    <div class="slide" id="slide-4">
-      <div class="badge-tag accent">CODEBASE CATALOGUE</div>
-      <h2 class="slide-headline">Katalog Berkas: Kegunaan Setiap File Kode</h2>
-      <p class="slide-subtitle">Dokumentasi modular seluruh berkas pada repositori untuk kemudahan pemeliharaan tim pengembang.</p>
-
-      <div class="file-tabs">
-        <button class="file-tab-btn active" onclick="filterFiles('all')">Semua Berkas</button>
-        <button class="file-tab-btn" onclick="filterFiles('backend')">Backend Apps Script (.gs)</button>
-        <button class="file-tab-btn" onclick="filterFiles('frontend')">Frontend UI (.html)</button>
-        <button class="file-tab-btn" onclick="filterFiles('server')">Server Shimming & Tools</button>
-      </div>
-
-      <div class="file-catalog-grid" id="catalog-container">
-        <!-- Backend Items -->
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> Code.gs</div>
-          <div class="file-purpose">Entry point web (doGet), super cache aggregator, handler kalkulasi dashboard, dan integrasi AI chatbot.</div>
-        </div>
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> Core.gs</div>
-          <div class="file-purpose">Fondasi infrastruktur: sanitasi input data, in-memory cache TTL, lock service, dan role access guard.</div>
-        </div>
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> SessionAuth.gs</div>
-          <div class="file-purpose">Pengelola token sesi login 7 hari, verifikasi token berkecepatan tinggi, dan terminasi sesi logout.</div>
-        </div>
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> AuthHash.gs</div>
-          <div class="file-purpose">Modul enkripsi password modern: algoritma PBKDF2-HMAC-SHA256 dengan salt unik per user + secret pepper.</div>
-        </div>
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> MasterData.gs</div>
-          <div class="file-purpose">CRUD master data bioskop, mapping outlet, regional, Line of Business (XXI/Premiere/IMAX), dan kamus data.</div>
-        </div>
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> DataImport.gs</div>
-          <div class="file-purpose">Engine parser impor file Excel/CSV transaksi: chunking processor, validasi tanggal WIB, & matching.</div>
-        </div>
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> DataReport.gs</div>
-          <div class="file-purpose">Query engine laporan transaksi detail: filter dinamis, inline row editing, dan bulk deletion.</div>
-        </div>
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> AdminUsers.gs & AdminDelete.gs</div>
-          <div class="file-purpose">Panel administrasi: manajemen akun pengguna (tambah/edit/status) dan pembersihan data massal ber-token aman.</div>
-        </div>
-        <div class="file-item" data-cat="backend">
-          <div class="file-name"><span>📄</span> AuditLog.gs & Account.gs</div>
-          <div class="file-purpose">Pencatatan riwayat audit login/aktivitas pengguna serta modul mandiri ganti kata sandi.</div>
-        </div>
-
-        <!-- Frontend Items -->
-        <div class="file-item" data-cat="frontend">
-          <div class="file-name"><span>🌐</span> Index.html</div>
-          <div class="file-purpose">Template UI utama: shell layout, sidebar, KPI summary metrics, dan modul Outlet Summary Performance.</div>
-        </div>
-        <div class="file-item" data-cat="frontend">
-          <div class="file-name"><span>🌐</span> ui_Shared.html</div>
-          <div class="file-purpose">Design system & utility global: styling tema Cinema XXI, komponen window.KPI, modal dialog, dan notifikasi.</div>
-        </div>
-        <div class="file-item" data-cat="frontend">
-          <div class="file-name"><span>🌐</span> ui_Router.html</div>
-          <div class="file-purpose">Client-side view router: routing halaman tanpa reload, role-based screen lock, & reload state handler.</div>
-        </div>
-        <div class="file-item" data-cat="frontend">
-          <div class="file-name"><span>🌐</span> ui_Mapping.html & Js</div>
-          <div class="file-purpose">Modul Geographic Intelligence: visualisasi peta SVG interaktif 38 provinsi, analisis SPH per wilayah tanpa CDN.</div>
-        </div>
-        <div class="file-item" data-cat="frontend">
-          <div class="file-name"><span>🌐</span> ui_CompDetail.html & Js</div>
-          <div class="file-purpose">Modul Comparison Detail: grafik perbandingan performa metrik GBO dan HTM antar rentang tanggal.</div>
-        </div>
-        <div class="file-item" data-cat="frontend">
-          <div class="file-name"><span>🌐</span> ui_Upload.html & Js</div>
-          <div class="file-purpose">Antarmuka drag-and-drop import file transaksi dengan indikator progress bar dan verifikasi pra-impor.</div>
-        </div>
-        <div class="file-item" data-cat="frontend">
-          <div class="file-name"><span>🌐</span> ui_Report.html & Js</div>
-          <div class="file-purpose">Antarmuka tabel laporan transaksi detail: live search, paginasi cepat, inline edit data, dan ekspor Excel.</div>
-        </div>
-
-        <!-- Server & Tools Items -->
-        <div class="file-item" data-cat="server">
-          <div class="file-name"><span>⚙️</span> start.js</div>
-          <div class="file-purpose">HTTP Web Server utama (Node native): jembatan google.script.run, RPC whitelist, proteksi CSRF & DNS Rebinding.</div>
-        </div>
-        <div class="file-item" data-cat="server">
-          <div class="file-name"><span>⚙️</span> lib/shim-spreadsheet.js</div>
-          <div class="file-purpose">Driver emulator SpreadsheetApp: memetakan pembacaan baris, kolom, dan range sel Google Sheets ke database SQLite.</div>
-        </div>
-        <div class="file-item" data-cat="server">
-          <div class="file-name"><span>⚙️</span> lib/shim-services.js</div>
-          <div class="file-purpose">Emulator layanan Google: CacheService (TTL RAM), PropertiesService, Utilities crypto, HtmlService, dan LockService.</div>
-        </div>
-        <div class="file-item" data-cat="server">
-          <div class="file-name"><span>⚙️</span> lib/runtime.js & db.js</div>
-          <div class="file-purpose">Eksekusi node:vm sandbox untuk kode .gs dan driver koneksi database SQLite (app.db) ACID-compliant.</div>
-        </div>
-        <div class="file-item" data-cat="server">
-          <div class="file-name"><span>⚙️</span> tools/ (backup, restore, reset)</div>
-          <div class="file-purpose">Tooling pemeliharaan CLI: hot-backup SQLite (backup.js), pemulihan (restore.js), dan darurat reset sandi admin.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 5: SECURITY AUDIT & FINDINGS -->
-    <div class="slide" id="slide-5">
-      <div class="badge-tag warning">SECURITY AUDIT & REMEDIATION</div>
-      <h2 class="slide-headline">Analisis Keamanan & Mitigasi Kunci API</h2>
-      <p class="slide-subtitle">Audit transparan atas postur keamanan kode sumber dan tindakan perbaikan yang telah disiapkan.</p>
-
-      <div class="grid-2">
-        <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
-          <div class="card-icon" style="color: #34d399; background: rgba(16, 185, 129, 0.1);">✓</div>
-          <div class="card-title">Lapisan Proteksi yang Sangat Solid</div>
-          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-left: 20px;">
-            <li><b>Kriptografi Sandi:</b> PBKDF2-HMAC-SHA256 dengan Salt acak unik per akun + Secret Pepper terisolasi di berkas <code>.env</code>.</li>
-            <li><b>RPC Function Whitelisting:</b> Hanya 28 fungsi legal di dalam set <code>DIIZINKAN</code> yang boleh dipanggil dari browser melalui HTTP POST.</li>
-            <li><b>Anti DNS-Rebinding:</b> Pengecekan ketat header Host terhadap daftar <code>ALLOWED_HOSTS</code>.</li>
-            <li><b>Anti Cross-Site Request Forgery (CSRF):</b> Validasi Origin / Referer header pada seluruh pemanggilan endpoint API.</li>
+        <div class="card" style="border-color: rgba(239, 68, 68, 0.3);">
+          <div class="card-icon" style="color: #ef4444;">🛑</div>
+          <div class="card-title">Masa Lalu: Keterbatasan Google Apps Script</div>
+          <ul style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-left: 18px;">
+            <li><b>Kecepatan Terbatas:</b> Menunggu 5 - 15 detik saat membuka laporan karena harus membaca Google Sheets.</li>
+            <li><b>Batasan Kuota Harian:</b> Google membatasi waktu eksekusi maksimal 6 menit (rentan gagal saat memproses data besar).</li>
+            <li><b>Ketergantungan Eksternal:</b> Jika koneksi Google Drive lambat atau diblokir di jaringan bioskop, aplikasi mati total.</li>
           </ul>
         </div>
 
-        <div class="card" style="border-color: rgba(239, 68, 68, 0.4);">
-          <div class="card-icon" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">⚠</div>
-          <div class="card-title">Temuan Kritis & Rencana Remediasi</div>
+        <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+          <div class="card-icon" style="color: #34d399;">💎</div>
+          <div class="card-title">Masa Depan: Keunggulan Server Profesional Mandiri</div>
+          <ul style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-left: 18px;">
+            <li><b>Kecepatan Kilat (< 1 Detik):</b> Data tersimpan di basis data lokal SQLite berkecepatan tinggi.</li>
+            <li><b>Tanpa Batasan Kuota:</b> Mampu memproses ratusan ribu baris data transaksi bioskop tanpa batasan waktu.</li>
+            <li><b>100% Kontrol Internal:</b> Berjalan di infrastruktur server milik Cinema XXI sendiri, aman, dan bisa diakses intranet maupun publik.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="analogy-box" style="margin-top: 20px;">
+        <span style="font-size: 1.3rem;">💡</span>
+        <div>
+          <b>Analogi Sederhana untuk Manajemen:</b><br>
+          <i>"Apps Script itu seperti menyewa warung tenda di tanah orang lain—mudah dibuka tetapi dibatasi jam operasional dan cuaca. Sementara migrasi ke Server Profesional ini seperti membangun gedung ruko milik sendiri—bebas kita buka 24 jam, kokoh, dan siap menampung ribuan pengunjung."</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: PRD (PRODUCT REQUIREMENTS DOCUMENT) -->
+    <div class="slide" id="slide-3">
+      <div class="badge-tag accent">PRODUCT REQUIREMENTS (PRD)</div>
+      <h2 class="slide-headline">PRD: Definisi & Kebutuhan Produk</h2>
+      <p class="slide-subtitle">Gambaran komprehensif produk: Siapa penggunanya, apa masalah yang diselesaikan, dan apa ukuran keberhasilannya.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">1. Masalah yang Diselesaikan</div>
           <p class="card-desc">
-            Ditemukan kunci API Anthropic yang tercatat di dalam berkas legacy:
-            <br><code style="color: #f87171;">apps-script/Code.gs (Baris 610)</code> fungsi <code>setApiKeyOnce()</code>.
+            Manajemen kesulitan memantau capaian target penjualan makanan/minuman (F&B) dan tiket di ratusan bioskop secara real-time karena laporan Excel terpisah-pisah dan lambat diolah.
           </p>
-          <div class="code-snippet" style="color: #f87171;">
-            // Temuan di Code.gs baris 610:<br>
-            PropertiesService.getScriptProperties().setProperty(<br>
-              'ANTHROPIC_API_KEY', 'sk-ant-api03-cJToyx...'<br>
-            );
+        </div>
+
+        <div class="card">
+          <div class="card-title">2. Target Pengguna (Persona)</div>
+          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-left: 18px;">
+            <li><b>Direksi & Head Office:</b> Melihat performa nasional & ranking wilayah.</li>
+            <li><b>Regional Manager (RM):</b> Memantau bioskop di wilayah provinsinya.</li>
+            <li><b>Cinema Manager (Area):</b> Mengevaluasi capaian bulanan outletnya.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">3. Tolok Ukur Keberhasilan (KPI)</div>
+          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-left: 18px;">
+            <li><b>Integritas Finansial:</b> 100% akurasi kalkulasi SPH & GBO.</li>
+            <li><b>Waktu Akses:</b> Dashboard terbuka di bawah 1 detik.</li>
+            <li><b>Kemandirian Sistem:</b> 0% dependensi ke cloud luar.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 18px;">
+        <div class="card-title">4. Fitur-Fitur Kunci Produk (Core Features)</div>
+        <div class="grid-4" style="margin-top: 8px;">
+          <div>
+            <strong style="color: #60a5fa; font-size: 0.95rem;">Executive Overview</strong>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Kartu metrik Omzet F&B, Penonton, SPH, dan % pencapaian target bulanan.</p>
           </div>
-          <p class="card-desc" style="color: #34d399; font-size: 0.84rem;">
-            <b>Langkah Mitigasi:</b> Kunci segera di-revoke di konsol AI. Kode tersebut dihapus, dan sistem dialihkan 100% membaca dari <code>process.env.ANTHROPIC_API_KEY</code>.
+          <div>
+            <strong style="color: #34d399; font-size: 0.95rem;">Peta Sebaran Nasional</strong>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Peta Indonesia (38 provinsi) interaktif tanpa butuh internet luar.</p>
+          </div>
+          <div>
+            <strong style="color: #c084fc; font-size: 0.95rem;">Outlet Drilldown</strong>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Analisis riwayat ketercapaian target per bioskop tiap bulannya.</p>
+          </div>
+          <div>
+            <strong style="color: #fbbf24; font-size: 0.95rem;">Asisten Analisis AI</strong>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Chatbox cerdas untuk merangkum tren penjualan secara instan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: PROSES BISNIS SEHARI-HARI -->
+    <div class="slide" id="slide-4">
+      <div class="badge-tag">DAILY BUSINESS PROCESS</div>
+      <h2 class="slide-headline">Alur Kerja Bisnis Sehari-hari</h2>
+      <p class="slide-subtitle">Bagaimana tim operasional menggunakan aplikasi ini mulai dari input data hingga terbitnya laporan eksekutif.</p>
+
+      <div class="wf-container">
+        <div class="wf-step">
+          <div class="wf-badge">LANGKAH 1</div>
+          <h4>Upload Data Penjualan</h4>
+          <p>Admin mengunggah file Excel penjualan bioskop. Sistem otomatis menyesuaikan tanggal transaksi dengan Waktu Indonesia Barat (WIB).</p>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step">
+          <div class="wf-badge">LANGKAH 2</div>
+          <h4>Penyelarasan Master Data</h4>
+          <p>Sistem mencocokkan data bioskop baru ke kota, regional, dan merek layar bioskop (XXI biasa, Premiere, atau IMAX).</p>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step">
+          <div class="wf-badge">LANGKAH 3</div>
+          <h4>Kalkulasi KPI Otomatis</h4>
+          <p>Sistem menghitung rasio belanja penonton (SPH), selisih target, dan pertumbuhan penjualan dibandingkan bulan lalu.</p>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step">
+          <div class="wf-badge">LANGKAH 4</div>
+          <h4>Penyajian Dashboard Sesuai Jabatan</h4>
+          <p>Direksi melihat seluruh Indonesia, Regional Manager hanya melihat wilayahnya, dan Cinema Manager hanya melihat bioskopnya.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Rumus Finansial Bisnis: SPH (Spend Per Head)</div>
+          <p class="card-desc">
+            Sistem menggunakan prinsip keuangan ketat: <b>Jumlahkan semua omzet dulu, baru bagi dengan total penonton</b>. Hal ini mencegah kesalahan hitung jika ada bioskop yang penontonnya sedikit tetapi belanjanya besar.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title">Perhitungan Pertumbuhan (Growth) yang Adil</div>
+          <p class="card-desc">
+            Jika manajemen melihat performa tanggal 1 - 15 Oktober (15 hari), sistem otomatis membandingkannya dengan 15 hari persis sebelumnya (16 - 30 September).
           </p>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 6: PUBLIC HOSTING & INSTALLATION GUIDE -->
-    <div class="slide" id="slide-6">
-      <div class="badge-tag accent">TURNKEY DEPLOYMENT</div>
-      <h2 class="slide-headline">Panduan Instalasi & Hosting Publik Siap Pakai</h2>
-      <p class="slide-subtitle">Langkah praktis bagi Tim IT DevOps untuk men-deploy aplikasi ke server produksi publik dalam hitungan menit.</p>
+    <!-- SLIDE 5: WORKFLOW MIGRASI DARI LAPTOP KE HOSTING PUBLIK -->
+    <div class="slide" id="slide-5">
+      <div class="badge-tag accent">MIGRATION ROADMAP</div>
+      <h2 class="slide-headline">Workflow Migrasi: Dari Laptop Sampai Hosting Publik</h2>
+      <p class="slide-subtitle">Panduan langkah demi langkah yang jelas dan terstruktur untuk memindahkan aplikasi ke server manajemen.</p>
 
-      <div class="grid-2">
-        <!-- Opsi 1: Docker -->
-        <div class="card">
-          <div class="card-icon" style="color: #38bdf8;">🐳</div>
-          <div class="card-title">Opsi 1: Docker Container (Sangat Direkomendasikan)</div>
-          <p class="card-desc">File <code>Dockerfile</code> dan <code>docker-compose.yml</code> sudah tersedia di root proyek.</p>
-          <div class="code-snippet">
-            # 1. Masuk ke folder proyek di server publik<br>
-            cd /opt/kpi-analyst<br><br>
-            # 2. Siapkan file environment<br>
-            cp .env.example .env<br>
-            nano .env  # Atur ALLOWED_HOSTS & AUTH_PEPPER<br><br>
-            # 3. Jalankan container produksi<br>
-            docker compose up -d --build
-          </div>
+      <div class="wf-container">
+        <div class="wf-step">
+          <div class="wf-badge">TAHAP 1</div>
+          <h4>Kemas Kode & Database</h4>
+          <p>Kode di laptop sudah bersih dan lengkap. Database SQLite <code>app.db</code> disalin utuh berisi seluruh riwayat penjualan.</p>
+          <div class="code-pill">Hasil: 1 Folder Rapi & Mandiri</div>
         </div>
-
-        <!-- Opsi 2: Baremetal / PM2 -->
-        <div class="card">
-          <div class="card-icon" style="color: #a78bfa;">⚡</div>
-          <div class="card-title">Opsi 2: Linux Baremetal / VM (Node.js + PM2)</div>
-          <p class="card-desc">Untuk deployment langsung pada server Ubuntu/Debian/RHEL.</p>
-          <div class="code-snippet">
-            # 1. Pastikan Node.js 22 terpasang (node -v)<br>
-            # 2. Pasang PM2 Process Manager<br>
-            npm install -g pm2<br><br>
-            # 3. Start daemon produksi dengan timezone WIB<br>
-            pm2 start apps-script/server/start.js \<br>
-              --name "kpi-xxi" \<br>
-              --node-args="--disable-warning=ExperimentalWarning"<br><br>
-            pm2 startup && pm2 save
-          </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step">
+          <div class="wf-badge">TAHAP 2</div>
+          <h4>Kirim ke Server IT Internal</h4>
+          <p>Folder disalin ke komputer server internal IT (Linux / Windows Server) yang sudah dipasang Node.js 22.</p>
+          <div class="code-pill">Lokasi: Server Kantor XXI</div>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step">
+          <div class="wf-badge">TAHAP 3</div>
+          <h4>Nyalakan Sebagai Service 24/7</h4>
+          <p>Dijalankan menggunakan <b>Docker</b> atau <b>PM2</b> agar aplikasi selalu menyala otomatis meskipun server mati lampu/restart.</p>
+          <div class="code-pill">Status: Aktif di Background</div>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step">
+          <div class="wf-badge">TAHAP 4</div>
+          <h4>Sambungkan ke Domain Publik</h4>
+          <p>Tim IT memasang Nginx dan mengarahkan domain perusahaan (misal: <code>kpi.cinema21.co.id</code>) lengkap dengan gembok SSL (HTTPS).</p>
+          <div class="code-pill">Status: Live & Siap Diakses</div>
         </div>
       </div>
 
-      <div class="card" style="margin-top: 16px;">
-        <div class="card-title">Reverse Proxy Nginx & SSL Let's Encrypt (Port 80/443 Publik)</div>
-        <p class="card-desc" style="font-size: 0.85rem;">
-          Template konfigurasi <code>nginx-production.conf</code> telah dibuat. Cukup salin ke <code>/etc/nginx/sites-available/</code> dan jalankan:
-          <code style="color: #38bdf8; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">certbot --nginx -d kpi.cinema21.co.id</code>.
+      <div class="card">
+        <div class="card-title">Kemudahan Bagi Tim IT Dev (Tinggal Hosting Saja)</div>
+        <p class="card-desc">
+          Semua file pendukung server seperti <b>Dockerfile</b>, <b>docker-compose.yml</b>, dan <b>nginx-production.conf</b> sudah dibuatkan di dalam folder proyek. Tim IT tidak perlu pusing menyusun konfigurasi dari nol—cukup jalankan satu perintah <code>docker compose up -d</code> dan website langsung aktif.
         </p>
       </div>
     </div>
 
-    <!-- SLIDE 7: HANDOVER CHECKLIST -->
-    <div class="slide" id="slide-7">
-      <div class="badge-tag">HANDOVER READINESS</div>
-      <h2 class="slide-headline">Kesiapan Handover ke Tim IT Dev</h2>
-      <p class="slide-subtitle">Daftar verifikasi kelayakan sebelum aplikasi dinyatakan siap operasional publik (Production Go-Live).</p>
+    <!-- SLIDE 6: PENJELASAN TEKNIS DENGAN BAHASA RAMAH -->
+    <div class="slide" id="slide-6">
+      <div class="badge-tag">SECURITY & RELIABILITY</div>
+      <h2 class="slide-headline">Keamanan Data & Temuan Kunci Rahasia</h2>
+      <p class="slide-subtitle">Menjelaskan kondisi keamanan sistem dengan transparan agar Head IT merasa tenang dan yakin.</p>
 
-      <div class="grid-3">
-        <div class="card">
-          <div class="card-title">1. Codebase Completeness</div>
-          <div class="card-desc">
-            • 0 Eksternal NPM dependencies.<br>
-            • Aset vendor offline lengkap di lokal.<br>
-            • Peta SVG Indonesia offline lengkap.<br>
-            • Bebas dari resiko dependensi cloud Google.
-          </div>
+      <div class="grid-2">
+        <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+          <div class="card-icon" style="color: #34d399;">🛡️</div>
+          <div class="card-title">Apa yang Sudah Sangat Aman?</div>
+          <ul style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-left: 18px;">
+            <li><b>Password Pengguna Terkunci Rapat:</b> Kata sandi diacak dengan rumus enkripsi tinggi (PBKDF2) dan kunci rahasia (*pepper*) yang tidak disimpan di database.</li>
+            <li><b>Pintu Masuk Terjaga (Whitelist):</b> Pengguna dari browser hanya diizinkan memanggil fungsi laporan yang sudah disetujui, tidak bisa sembarangan mengutak-atik sistem.</li>
+            <li><b>Kebal Gangguan Internet Luar:</b> Seluruh font, ikon, dan peta disimpan di dalam server internal sendiri (tidak takut diblokir jaringan).</li>
+          </ul>
         </div>
 
-        <div class="card">
-          <div class="card-title">2. Automated Quality Gate</div>
-          <div class="card-desc">
-            • 39 Unit & Parity tests lulus (<code>npm test</code>).<br>
-            • Integritas kalkulasi formula tervalidasi.<br>
-            • Simulasi HTTP request terproteksi.<br>
-            • Data parity check terverifikasi OK.
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">3. DevOps Operations Kit</div>
-          <div class="card-desc">
-            • Script hot-backup SQLite (<code>npm run backup</code>).<br>
-            • Tooling restore darurat (<code>npm run restore</code>).<br>
-            • Reset kata sandi admin (<code>npm run reset-sandi</code>).<br>
-            • Template Docker & Nginx SSL siap pakai.
+        <div class="card" style="border-color: rgba(239, 68, 68, 0.4);">
+          <div class="card-icon" style="color: #ef4444;">🔍</div>
+          <div class="card-title">Temuan Audit: 1 Kunci yang Harus Dirapikan</div>
+          <p class="card-desc">
+            Dalam pemeriksaan kode, ditemukan <b>kunci AI (Anthropic API Key)</b> bekas uji coba lama yang masih tertulis di dalam file <code>Code.gs</code> baris 610.
+          </p>
+          <div class="analogy-box" style="border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">
+            <span>⚠️</span>
+            <div>
+              <b>Solusi Cepat Sebelum Serah-Terima:</b><br>
+              Kunci lama tersebut cukup dihapus dari kode. Kunci baru yang resmi dari kantor cukup dimasukkan ke file rahasia <code>.env</code> di server. Sangat mudah dan aman!
+            </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="card" style="margin-top: 24px; text-align: center; border-color: rgba(59, 130, 246, 0.4);">
-        <h3 style="color: #fff; font-size: 1.25rem;">Status Akhir: 100% SIAP DISERAH-TERIMAKAN (TURNKEY SOLUTION)</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">
-          Tim IT Dev tinggal mengarahkan domain DNS publik dan mengeksekusi container/server daemon.
+    <!-- SLIDE 7: ROADMAP PENGEMBANGAN SERVER PROFESIONAL -->
+    <div class="slide" id="slide-7">
+      <div class="badge-tag purple">FUTURE ROADMAP</div>
+      <h2 class="slide-headline">Roadmap Masa Depan Pasca-Apps Script</h2>
+      <p class="slide-subtitle">Rencana pengembangan berikutnya setelah aplikasi sukses bertengger di server internal profesional.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon" style="color: #38bdf8;">🔄</div>
+          <div class="card-title">Fase 1: Otomasi Penarikan Data (ETL)</div>
+          <p class="card-desc">
+            Menghubungkan aplikasi langsung ke basis data kasir/POS Cinema XXI pusat setiap malam. Admin tidak perlu lagi mengunggah file Excel secara manual.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon" style="color: #34d399;">📱</div>
+          <div class="card-title">Fase 2: Notifikasi Bot WhatsApp / Email</div>
+          <p class="card-desc">
+            Kirim ringkasan otomatis setiap jam 08:00 pagi ke grup WhatsApp Direksi: bioskop mana yang mencapai target tertinggi dan outlet mana yang perlu perhatian.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon" style="color: #c084fc;">📊</div>
+          <div class="card-title">Fase 3: Multi-LOB Deep Analytics</div>
+          <p class="card-desc">
+            Ekspansi analitik mendalam per jenis menu makanan (Popcorn, Minuman, Combo) dan perbandingan penonton per studio film.
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 20px; text-align: center; border-color: rgba(59, 130, 246, 0.4);">
+        <h3 style="color: #fff; font-size: 1.25rem;">SIAP UNTUK IMPLEMENTASI DAN SERAH-TERIMA</h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 4px;">
+          Seluruh persiapan teknis, dokumen panduan, dan file instalasi siap diserahkan kepada Head IT dan tim DevOps.
         </p>
       </div>
     </div>
@@ -850,7 +686,7 @@
     <div class="key-hint">
       <span>Navigasi: <span class="kbd">←</span> <span class="kbd">→</span> atau <span class="kbd">Space</span></span>
       <span>|</span>
-      <span>Fullscreen: <span class="kbd">F</span></span>
+      <span>Layar Penuh: <span class="kbd">F</span></span>
     </div>
 
     <div class="slide-counter" id="slide-counter">1 / 7</div>
@@ -894,20 +730,6 @@
 
     function prevSlide() {
       if (currentSlide > 1) showSlide(currentSlide - 1);
-    }
-
-    function filterFiles(category) {
-      document.querySelectorAll('.file-tab-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-
-      const items = document.querySelectorAll('.file-item');
-      items.forEach(item => {
-        if (category === 'all' || item.getAttribute('data-cat') === category) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
-      });
     }
 
     document.addEventListener('keydown', function(e) {
